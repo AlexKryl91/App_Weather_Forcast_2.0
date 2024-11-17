@@ -1,0 +1,39 @@
+.tabs {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  &__day {
+    width: 160px;
+    height: 140px;
+    padding: 10px 15px;
+    background: var(--color-tab-bg);
+    border: var(--border-tab);
+    border-radius: 10px;
+    color: var(--color-grey-dark);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .dow {
+      font-size: 18px;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .date {
+      font-size: 14px;
+    }
+
+    .w-icon {
+      margin-inline: auto;
+    }
+
+    .temp {
+      font-size: 20px;
+      text-align: center;
+      font-weight: 500;
+    }
+  }
+}

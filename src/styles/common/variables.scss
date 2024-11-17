@@ -1,0 +1,40 @@
+:root {
+  // colors
+  --color-app-bg: #ffffff80;
+  --color-app-border: #ffffff99;
+  --color-tab-bg: #ffffff99;
+  --color-tab-border: #ffffffcc;
+  --color-text-blue: #005d8a;
+  --color-grey-dark: #333333;
+  --color-grey-medium: #505050;
+  --color-grey-light: #0000004d;
+
+  // shadows
+  --shadow-section: 0 -16px 16px #00000040;
+  --shadow-card-light: 4px 6px 6px #00000040;
+  --shadow-card-dark: -4px 6px 6px #00000040;
+
+  // border
+  --border-app: 1px solid var(--color-app-border);
+  --border-tab: 1px solid var(--color-tab-border);
+  --border-grey: 1px solid var(--color-grey-light);
+
+  // mask
+  --mask-right-gradient: linear-gradient(
+    90deg,
+    #0000 0%,
+    #fff 5%,
+    #fff 95%,
+    #0000 100%
+  );
+
+  // fonts
+  --ff-main: 'Inter', Arial, Verdana, sans-serif;
+
+  // common style
+  --desktop-max-width: 1280px;
+  --app-max-width: 1240px;
+
+  // for effects
+  --transition-duration: 0.3s;
+}

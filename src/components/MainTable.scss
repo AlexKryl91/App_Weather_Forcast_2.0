@@ -1,0 +1,51 @@
+.weather-table {
+  height: 100%;
+  margin-block: 20px;
+  display: flex;
+  justify-content: space-between;
+
+  .head-item {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .date-wrapper {
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--color-grey-medium);
+
+      .dow {
+        font-size: 32px;
+        font-weight: 700;
+      }
+      .date {
+        display: flex;
+        align-items: center;
+        column-gap: 12px;
+      }
+      .time {
+        display: flex;
+        align-items: center;
+        column-gap: 10px;
+      }
+    }
+
+    .table {
+      font-size: 18px;
+      color: var(--color-grey-dark);
+      border-collapse: collapse;
+
+      .param {
+        background: teal;
+      }
+    }
+  }
+
+  .w-item {
+    background: teal;
+    // border: 1px solid red;
+    width: 100px;
+    height: 100%;
+  }
+}

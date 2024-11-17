@@ -1,0 +1,9 @@
+// html scrollbar ban
+
+.hidden-scrollbar {
+  overflow: hidden;
+
+  &::-webkit-scrollbar {
+    width: 0px;
+  }
+}

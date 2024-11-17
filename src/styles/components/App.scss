@@ -1,0 +1,26 @@
+body {
+  background-image: image-set(
+    url('@/assets/img/bg_autumn.avif') type('image/avif'),
+    url('@/assets/img/bg_autumn.jpg') type('image/jpeg')
+  );
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  font-family: var(--ff-main);
+  font-weight: 400;
+  font-size: 16px;
+  padding: 20px;
+}
+
+#app {
+  width: 100%;
+  height: 100%;
+  background: var(--color-app-bg);
+  border: var(--border-app);
+  border-radius: 20px;
+  padding: 0 20px 20px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
