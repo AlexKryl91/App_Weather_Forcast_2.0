@@ -10,11 +10,19 @@ body {
   font-weight: 400;
   font-size: 16px;
   padding: 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #app {
+  position: relative;
   width: 100%;
+  max-width: 1240px;
   height: 100%;
+  max-height: 792px;
+
   background: var(--color-app-bg);
   border: var(--border-app);
   border-radius: 20px;
@@ -23,4 +31,6 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
+  overflow: hidden;
 }

@@ -1,0 +1,130 @@
+.header {
+  position: relative;
+  padding-block: 15px;
+  border-bottom: var(--border-grey);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .logo-wrapper {
+    display: flex;
+    align-items: center;
+    column-gap: 20px;
+
+    h1 {
+      font-weight: 700;
+      font-size: 28px;
+      color: var(--color-text-blue);
+      text-shadow: 0 0 20px #fff;
+    }
+  }
+
+  .tools-wrapper {
+    position: relative;
+    display: flex;
+
+    $h-size: 40px;
+
+    .search-bar {
+      height: $h-size;
+      width: $h-size;
+      border-radius: $h-size;
+      background: none;
+      transition: var(--transition-duration);
+      padding-left: $h-size;
+      font-size: 20px;
+      color: var(--color-text-blue);
+      overflow: hidden;
+
+      &_active {
+        background: #fff;
+        width: 500px;
+        padding-left: 54px;
+      }
+    }
+
+    .location-btn {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: $h-size;
+      height: $h-size;
+      background: none;
+
+      svg {
+        transition: var(--transition-duration);
+
+        * {
+          transition: var(--transition-duration);
+        }
+      }
+    }
+
+    .settings-btn {
+      margin-inline: 20px 10px;
+      background: none;
+
+      svg {
+        transition: var(--transition-duration);
+
+        * {
+          transition: var(--transition-duration);
+        }
+      }
+    }
+
+    .loc-active svg {
+      scale: 1.1;
+      filter: drop-shadow(0 0 4px #fff);
+
+      path {
+        fill: var(--color-text-blue);
+        fill-opacity: 1;
+        transform-origin: center;
+        transition-delay: var(--transition-duration);
+        transform: rotateY(180deg);
+      }
+      circle {
+        stroke: var(--color-text-blue);
+        stroke-opacity: 1;
+      }
+    }
+
+    .set-active svg {
+      scale: 1.1;
+      filter: drop-shadow(0 0 4px #fff);
+      transform: rotateZ(180deg);
+
+      * {
+        stroke: var(--color-text-blue);
+        stroke-opacity: 1;
+      }
+    }
+  }
+}
+
+@media (hover: hover) {
+  .header {
+    .tools-wrapper {
+      .location-btn svg:hover {
+        filter: drop-shadow(0 0 4px #fff);
+        path {
+          fill: var(--color-text-blue);
+          fill-opacity: 1;
+        }
+        circle {
+          stroke: var(--color-text-blue);
+          stroke-opacity: 1;
+        }
+      }
+
+      .settings-btn svg:hover {
+        filter: drop-shadow(0 0 4px #fff);
+        * {
+          stroke: var(--color-text-blue);
+          stroke-opacity: 1;
+        }
+      }
+    }
+  }
+}

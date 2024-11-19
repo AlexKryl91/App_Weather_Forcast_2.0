@@ -1,39 +1,28 @@
-# .
+# Веб-приложение "Weather Forcast"
 
-This template should help get you started developing with Vue 3 in Vite.
+### Описание:
 
-## Recommended IDE Setup
+Веб-приложение для просмотра прогноза погоды в любой точке мира на ближайшие 7 дней.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+_**Особенности:**_
 
-## Type Support for `.vue` Imports in TS
+- Адаптивный интерфейс
+- Сохранение последней локации
+- Технология PWA
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+---
 
-## Customize configuration
+### Используемые технологии:
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+> - **Figma**
+> - **HTML**
+> - **SCSS**
+> - **TypeScript**
+> - **Vue**
+> - **Vite**
 
-## Project Setup
+---
 
-```sh
-npm install
-```
+**Примечания:**
 
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+С результатом можно ознакомиться по ссылке: https://alexkryl91.github.io/App_Weather_Forcast_2.0/
