@@ -1,16 +1,9 @@
 <script lang="ts">
-export default {
-  props: {
-    isOpened: {
-      type: Boolean,
-      required: true,
-    },
-  },
-};
+export default {};
 </script>
 
 <template>
-  <div class="modal" :class="{ open: isOpened }">
+  <div class="modal">
     <slot></slot>
   </div>
 </template>

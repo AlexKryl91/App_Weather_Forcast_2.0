@@ -1,43 +1,54 @@
 <script lang="ts">
 import geoFetch from '@/API/geoFetch';
+import { useGeoStore } from '@/stores/GeoStore';
 
 export default {
   props: {
     isSearchOpened: {
       type: Boolean,
       required: true,
+      default: false,
     },
     isSettingsOpened: {
       type: Boolean,
       required: true,
+      default: false,
     },
   },
   data() {
     return {
-      locationName: '',
+      locationInput: '',
       debounceId: -1,
+      geoStore: useGeoStore(),
     };
   },
   methods: {
-    inputHandler(event: Event) {
-      const target = event.target as HTMLInputElement;
-
-      clearTimeout(this.debounceId);
-
-      this.debounceId = setTimeout(() => {
-        this.locationName = target.value;
-        if (target.value) {
-          geoFetch(target.value)
-            .then((data) => {
-              console.log(data);
-            })
-            .catch((err) => alert(err));
-        }
-      }, 1000);
+    openSearch() {
+      this.$emit('searchOpen', true);
+      const el = this.$refs.search as HTMLInputElement;
+      el.focus();
     },
-    // someFunc() {
-    //   this.$emit('hoowoo', false);
-    // },
+  },
+  watch: {
+    locationInput(value) {
+      clearTimeout(this.debounceId);
+      this.debounceId = setTimeout(() => {
+        this.locationInput = value;
+        if (value) {
+          geoFetch(value)
+            .then((data) => {
+              if (data) {
+                this.geoStore.$patch((state) => (state.fetchedList = data));
+                console.log(data);
+              } else {
+                console.log('Ничего не найдено');
+              }
+            })
+            .catch((err) => alert(err))
+            .finally(() => console.log('Загрузка завершена'));
+        }
+      }, 500);
+    },
   },
 };
 </script>
@@ -50,8 +61,8 @@ export default {
     </div>
     <div class="tools-wrapper">
       <input
-        @input="inputHandler"
-        v-bind:value="locationName"
+        ref="search"
+        v-model="locationInput"
         class="search-bar"
         :class="{ 'search-bar_active': isSearchOpened }"
         type="text"
@@ -60,7 +71,7 @@ export default {
         required
       />
       <button
-        @click="$emit('searchOpen', true)"
+        @click="openSearch"
         class="location-btn"
         :class="{ 'loc-active': isSearchOpened }"
         type="button"

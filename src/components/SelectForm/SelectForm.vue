@@ -1,10 +1,19 @@
 <script lang="ts">
+import { useGeoStore } from '@/stores/GeoStore';
+
 export default {
   emits: ['searchOpen'],
   data() {
     return {
       notEmpty: true,
+      geoStore: useGeoStore(),
     };
+  },
+  methods: {
+    // test(e) {
+    //   e.preventDefault();
+    //   this.geoStore.setLocationName(this.geoStore.fetchedList[0]);
+    // },
   },
 };
 </script>

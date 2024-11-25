@@ -5,6 +5,7 @@ import TabsBar from '@/components/TabsBar/TabsBar.vue';
 import SelectForm from './SelectForm/SelectForm.vue';
 import SettingsList from './SettingsList/SettingsList.vue';
 import ModalWindow from './ModalWindow/ModalWindow.vue';
+import { Transition } from 'vue';
 
 export default {
   components: {
@@ -14,15 +15,14 @@ export default {
     SelectForm,
     SettingsList,
     ModalWindow,
+    Transition,
   },
-
   data() {
     return {
       isSearchOpened: false,
       isSettingsOpened: false,
     };
   },
-
   methods: {
     setOpenSearch(status: boolean) {
       this.isSettingsOpened = false;
@@ -45,13 +45,18 @@ export default {
   />
   <MainTable />
   <TabsBar />
-  <ModalWindow :is-opened="isSearchOpened">
-    <SelectForm @searchOpen="setOpenSearch" />
-  </ModalWindow>
-  <ModalWindow :is-opened="isSettingsOpened">
-    Окно настроек
-    <SettingsList @settingsOpen="setOpenSettings" />
-  </ModalWindow>
+  <Transition name="slide">
+    <ModalWindow v-if="isSearchOpened">
+      <SelectForm @searchOpen="setOpenSearch" />
+    </ModalWindow>
+  </Transition>
+
+  <Transition name="slide">
+    <ModalWindow v-if="isSettingsOpened">
+      Окно настроек
+      <SettingsList @settingsOpen="setOpenSettings" />
+    </ModalWindow>
+  </Transition>
 </template>
 
 <style src="./App.scss"></style>

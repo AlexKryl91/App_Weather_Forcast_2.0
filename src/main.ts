@@ -1,11 +1,10 @@
-import '@/styles/index.scss'
+import '@/styles/index.scss';
 
-import { createApp } from 'vue'
-// import { createPinia } from 'pinia'
-import App from './components/App.vue'
+import { createApp } from 'vue';
+import { createPinia } from 'pinia';
+import App from './components/App.vue';
 
-const app = createApp(App)
+const app = createApp(App);
+const pinia = createPinia();
 
-// app.use(createPinia())
-
-app.mount('#app')
+app.use(pinia).mount('#app');
