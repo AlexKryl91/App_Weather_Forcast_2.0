@@ -1,32 +1,34 @@
 <script lang="ts">
 import geoFetch from '@/API/geoFetch';
+import { useAppStore } from '@/stores/AppStore';
 import { useGeoStore } from '@/stores/GeoStore';
 
 export default {
-  props: {
-    isSearchOpened: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
-    isSettingsOpened: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
-  },
   data() {
     return {
+      geoStore: useGeoStore(),
+      appStore: useAppStore(),
       locationInput: '',
       debounceId: -1,
-      geoStore: useGeoStore(),
     };
   },
   methods: {
     openSearch() {
-      this.$emit('searchOpen', true);
-      const el = this.$refs.search as HTMLInputElement;
-      el.focus();
+      if (!this.appStore.isSearchOpened) {
+        this.locationInput = '';
+        this.appStore.isSearchOpened = true;
+        this.appStore.isSettingsOpened = false;
+        const el = this.$refs.search as HTMLInputElement;
+        el.focus();
+      }
+    },
+    openSettings() {
+      if (!this.appStore.isSettingsOpened) {
+        this.locationInput = '';
+        this.appStore.isSearchOpened = false;
+        this.appStore.isSettingsOpened = true;
+        this.geoStore.$reset();
+      }
     },
   },
   watch: {
@@ -37,12 +39,8 @@ export default {
         if (value) {
           geoFetch(value)
             .then((data) => {
-              if (data) {
-                this.geoStore.$patch((state) => (state.fetchedList = data));
-                console.log(data);
-              } else {
-                console.log('Ничего не найдено');
-              }
+              this.geoStore.fetchedList = data;
+              console.log(data)
             })
             .catch((err) => alert(err))
             .finally(() => console.log('Загрузка завершена'));
@@ -64,7 +62,7 @@ export default {
         ref="search"
         v-model="locationInput"
         class="search-bar"
-        :class="{ 'search-bar_active': isSearchOpened }"
+        :class="{ 'search-bar_active': appStore.isSearchOpened }"
         type="text"
         placeholder="Укажите локацию ..."
         title="Введите название локации для поиска"
@@ -73,7 +71,10 @@ export default {
       <button
         @click="openSearch"
         class="location-btn"
-        :class="{ 'loc-active': isSearchOpened }"
+        :class="{
+          'loc-active': appStore.isSearchOpened,
+          // init: !appStore.isPreConf,
+        }"
         type="button"
       >
         <svg
@@ -99,9 +100,9 @@ export default {
         </svg>
       </button>
       <button
-        @click="$emit('settingsOpen', true)"
+        @click="openSettings"
         class="settings-btn"
-        :class="{ 'set-active': isSettingsOpened }"
+        :class="{ 'set-active': appStore.isSettingsOpened }"
         type="button"
       >
         <svg

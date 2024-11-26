@@ -2,9 +2,10 @@ import { defineStore } from 'pinia';
 
 export const useAppStore = defineStore('appStore', {
   state: () => ({
-    searchIsOpened: false,
-    settingsIsOpened: false,
+    isSearchOpened: false,
+    isSettingsOpened: false,
+    isPreConf: false,
   }),
-  getters: {},
-  actions: {},
+  // getters: {},
+  // actions: {},
 });

@@ -5,6 +5,7 @@ import TabsBar from '@/components/TabsBar/TabsBar.vue';
 import SelectForm from './SelectForm/SelectForm.vue';
 import SettingsList from './SettingsList/SettingsList.vue';
 import ModalWindow from './ModalWindow/ModalWindow.vue';
+import { useAppStore } from '@/stores/AppStore';
 import { Transition } from 'vue';
 
 export default {
@@ -19,42 +20,37 @@ export default {
   },
   data() {
     return {
-      isSearchOpened: false,
-      isSettingsOpened: false,
+      appStore: useAppStore(),
     };
   },
-  methods: {
-    setOpenSearch(status: boolean) {
-      this.isSettingsOpened = false;
-      this.isSearchOpened = status;
-    },
-    setOpenSettings(status: boolean) {
-      this.isSearchOpened = false;
-      this.isSettingsOpened = status;
-    },
+  beforeMount() {
+    if (localStorage.getItem('preset')) {
+      console.log('Local Storage is Not Empty');
+      this.appStore.isPreConf = true;
+    } else {
+      console.log('Local Storage is Empty');
+    }
   },
 };
 </script>
 
 <template>
-  <HeaderBar
-    @searchOpen="setOpenSearch"
-    @settingsOpen="setOpenSettings"
-    :is-search-opened="isSearchOpened"
-    :is-settings-opened="isSettingsOpened"
-  />
-  <MainTable />
-  <TabsBar />
+  <HeaderBar />
+  <MainTable v-if="appStore.isPreConf" />
+  <TabsBar v-if="appStore.isPreConf" />
+  <div class="init">
+    <span>Укажите локацию, в которой хотели бы узнать погоду</span>
+  </div>
   <Transition name="slide">
-    <ModalWindow v-if="isSearchOpened">
-      <SelectForm @searchOpen="setOpenSearch" />
+    <ModalWindow v-if="appStore.isSearchOpened">
+      <SelectForm />
     </ModalWindow>
   </Transition>
 
   <Transition name="slide">
-    <ModalWindow v-if="isSettingsOpened">
+    <ModalWindow v-if="appStore.isSettingsOpened">
       Окно настроек
-      <SettingsList @settingsOpen="setOpenSettings" />
+      <SettingsList />
     </ModalWindow>
   </Transition>
 </template>

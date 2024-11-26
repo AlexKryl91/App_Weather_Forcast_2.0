@@ -1,8 +1,16 @@
 <script lang="ts">
+import { useAppStore } from '@/stores/AppStore';
+
 export default {
-  emits: ['settingsOpen'],
   data() {
-    return {};
+    return {
+      appStore: useAppStore(),
+    };
+  },
+  methods: {
+    closeSettings() {
+      this.appStore.isSettingsOpened = false;
+    },
   },
 };
 </script>
@@ -10,11 +18,7 @@ export default {
 <template>
   <div class="btn-wrapper">
     <button class="modal-btn" type="button">Применить</button>
-    <button
-      @click="$emit('settingsOpen', false)"
-      class="modal-btn"
-      type="button"
-    >
+    <button @click="closeSettings" class="modal-btn" type="button">
       Закрыть
     </button>
   </div>

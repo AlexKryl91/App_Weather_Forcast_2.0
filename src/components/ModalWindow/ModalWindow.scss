@@ -1,24 +1,50 @@
 .modal {
+  $head-h: 81px;
+
   position: absolute;
-  top: 81px;
+  top: $head-h;
   right: 0;
   width: 100%;
-  height: calc(100% - 81px);
+  height: calc(100% - $head-h);
+  padding: 30px 20px 40px;
+
   display: flex;
   flex-direction: column;
   align-items: center;
+  row-gap: 30px;
 
   background: #fff;
   box-shadow: 0 20px 16px #0000004d;
   overflow: hidden;
 }
 
+.btn-wrapper {
+  display: flex;
+  column-gap: 20px;
+
+  .modal-btn {
+    min-width: 150px;
+    padding: 10px 20px;
+    font-size: 20px;
+    color: #fff;
+    border-radius: 10px;
+    background-color: rgb(70, 120, 215);
+    transition: var(--transition-duration);
+
+    &:hover {
+      background-color: rgb(30, 75, 170);
+    }
+  }
+}
+
 .slide-enter-active,
 .slide-leave-active {
-  transition: height var(--transition-duration);
+  transition: transform var(--transition-duration);
+  transform-origin: top;
+  transform: rotateX(0deg);
 }
 
 .slide-enter-from,
 .slide-leave-to {
-  height: 0;
+  transform: rotateX(90deg);
 }

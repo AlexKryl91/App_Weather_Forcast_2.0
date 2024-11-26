@@ -8,4 +8,4 @@ export default {};
   </div>
 </template>
 
-<style scoped src="./ModalWindow.scss"></style>
+<style src="./ModalWindow.scss"></style>

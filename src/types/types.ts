@@ -13,3 +13,11 @@ export interface IGeoData {
   population?: number;
   timezone?: string;
 }
+
+export interface ILocation {
+  name: string;
+  fullName: string;
+  countryCode: string;
+  latidute: number;
+  longitude: number;
+}
