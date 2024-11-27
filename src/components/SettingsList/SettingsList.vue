@@ -2,6 +2,7 @@
 import { useAppStore } from '@/stores/AppStore';
 
 export default {
+  name: 'SettingsList',
   data() {
     return {
       appStore: useAppStore(),
@@ -17,10 +18,8 @@ export default {
 
 <template>
   <div class="btn-wrapper">
-    <button class="modal-btn" type="button">Применить</button>
-    <button @click="closeSettings" class="modal-btn" type="button">
-      Закрыть
-    </button>
+    <ModalButton>Применить</ModalButton>
+    <ModalButton @click="closeSettings">Закрыть</ModalButton>
   </div>
 </template>
 

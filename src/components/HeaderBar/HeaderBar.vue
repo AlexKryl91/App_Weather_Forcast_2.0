@@ -4,6 +4,7 @@ import { useAppStore } from '@/stores/AppStore';
 import { useGeoStore } from '@/stores/GeoStore';
 
 export default {
+  name: 'HeaderBar',
   data() {
     return {
       geoStore: useGeoStore(),
@@ -36,16 +37,29 @@ export default {
       clearTimeout(this.debounceId);
       this.debounceId = setTimeout(() => {
         this.locationInput = value;
+        this.geoStore.fetchedList = [];
         if (value) {
+          this.geoStore.isFetching = true;
           geoFetch(value)
             .then((data) => {
-              this.geoStore.fetchedList = data;
-              console.log(data)
+              if (data) {
+                this.geoStore.setFetchedList(data);
+              } else {
+                this.geoStore.setEmptyResponse();
+              }
             })
             .catch((err) => alert(err))
-            .finally(() => console.log('Загрузка завершена'));
+            .finally(() => (this.geoStore.isFetching = false));
         }
       }, 500);
+    },
+  },
+  computed: {
+    locationBtnClass() {
+      return {
+        'loc-active': this.appStore.isSearchOpened,
+        init: this.appStore.isInitialState && !this.appStore.isSearchOpened,
+      };
     },
   },
 };
@@ -71,10 +85,7 @@ export default {
       <button
         @click="openSearch"
         class="location-btn"
-        :class="{
-          'loc-active': appStore.isSearchOpened,
-          // init: !appStore.isPreConf,
-        }"
+        :class="locationBtnClass"
         type="button"
       >
         <svg

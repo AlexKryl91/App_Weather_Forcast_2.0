@@ -18,25 +18,6 @@
   overflow: hidden;
 }
 
-.btn-wrapper {
-  display: flex;
-  column-gap: 20px;
-
-  .modal-btn {
-    min-width: 150px;
-    padding: 10px 20px;
-    font-size: 20px;
-    color: #fff;
-    border-radius: 10px;
-    background-color: rgb(70, 120, 215);
-    transition: var(--transition-duration);
-
-    &:hover {
-      background-color: rgb(30, 75, 170);
-    }
-  }
-}
-
 .slide-enter-active,
 .slide-leave-active {
   transition: transform var(--transition-duration);

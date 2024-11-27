@@ -1,5 +1,7 @@
 <script lang="ts">
-export default {};
+export default {
+  name: 'ModalWindow',
+};
 </script>
 
 <template>
@@ -8,4 +10,4 @@ export default {};
   </div>
 </template>
 
-<style src="./ModalWindow.scss"></style>
+<style scoped src="./ModalWindow.scss"></style>

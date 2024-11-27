@@ -10,6 +10,7 @@ import iconCloud from '@/assets/icons/cloud.svg';
 import iconEye from '@/assets/icons/eye.svg';
 
 export default {
+  name: 'MainTable',
   data() {
     return {
       paramData: [

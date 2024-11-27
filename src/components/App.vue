@@ -1,26 +1,11 @@
 <script lang="ts">
-import HeaderBar from '@/components/HeaderBar/HeaderBar.vue';
-import MainTable from '@/components/MainTable/MainTable.vue';
-import TabsBar from '@/components/TabsBar/TabsBar.vue';
-import SelectForm from './SelectForm/SelectForm.vue';
-import SettingsList from './SettingsList/SettingsList.vue';
-import ModalWindow from './ModalWindow/ModalWindow.vue';
 import { useAppStore } from '@/stores/AppStore';
-import { Transition } from 'vue';
 
 export default {
-  components: {
-    HeaderBar,
-    MainTable,
-    TabsBar,
-    SelectForm,
-    SettingsList,
-    ModalWindow,
-    Transition,
-  },
   data() {
     return {
       appStore: useAppStore(),
+      isLoading: false,
     };
   },
   beforeMount() {
@@ -31,28 +16,35 @@ export default {
       console.log('Local Storage is Empty');
     }
   },
+  mounted() {
+    this.isLoading = false;
+  },
 };
 </script>
 
 <template>
-  <HeaderBar />
-  <MainTable v-if="appStore.isPreConf" />
-  <TabsBar v-if="appStore.isPreConf" />
-  <div class="init">
-    <span>Укажите локацию, в которой хотели бы узнать погоду</span>
-  </div>
-  <Transition name="slide">
-    <ModalWindow v-if="appStore.isSearchOpened">
-      <SelectForm />
-    </ModalWindow>
-  </Transition>
+  <div v-if="isLoading" class="preloader"></div>
+  <div v-else class="container">
+    <HeaderBar />
+    <div v-if="appStore.isInitialState" class="init">
+      <span>Укажите локацию, в которой хотели бы узнать погоду</span>
+    </div>
+    <MainTable v-if="!appStore.isInitialState" />
+    <TabsBar v-if="!appStore.isInitialState" />
 
-  <Transition name="slide">
-    <ModalWindow v-if="appStore.isSettingsOpened">
-      Окно настроек
-      <SettingsList />
-    </ModalWindow>
-  </Transition>
+    <Transition name="slide">
+      <ModalWindow v-if="appStore.isSearchOpened">
+        <SelectForm />
+      </ModalWindow>
+    </Transition>
+
+    <Transition name="slide">
+      <ModalWindow v-if="appStore.isSettingsOpened">
+        Окно настроек
+        <SettingsList />
+      </ModalWindow>
+    </Transition>
+  </div>
 </template>
 
 <style src="./App.scss"></style>

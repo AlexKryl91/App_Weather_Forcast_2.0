@@ -5,6 +5,7 @@ export const useAppStore = defineStore('appStore', {
     isSearchOpened: false,
     isSettingsOpened: false,
     isPreConf: false,
+    isInitialState: true,
   }),
   // getters: {},
   // actions: {},
