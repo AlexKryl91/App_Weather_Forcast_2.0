@@ -5,7 +5,7 @@ export default {
   data() {
     return {
       appStore: useAppStore(),
-      isLoading: false,
+      isLoading: true,
     };
   },
   beforeMount() {
@@ -17,14 +17,20 @@ export default {
     }
   },
   mounted() {
-    this.isLoading = false;
+    document.onreadystatechange = () => {
+      if (document.readyState === 'complete') {
+        this.isLoading = false;
+      }
+    };
   },
 };
 </script>
 
 <template>
-  <div v-if="isLoading" class="preloader"></div>
-  <div v-else class="container">
+  <Transition name="vanish">
+    <AppPreloader v-if="isLoading" />
+  </Transition>
+  <div v-show="!isLoading" class="container">
     <HeaderBar />
     <div v-if="appStore.isInitialState" class="init">
       <span>Укажите локацию, в которой хотели бы узнать погоду</span>

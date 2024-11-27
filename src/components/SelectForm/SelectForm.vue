@@ -1,13 +1,17 @@
 <script lang="ts">
+import meteoFetch from '@/API/meteoFetch';
 import { useAppStore } from '@/stores/AppStore';
 import { useGeoStore } from '@/stores/GeoStore';
+import { useMeteoStore } from '@/stores/MeteoStore';
+import type { ILocation } from '@/types/types';
 
 export default {
   name: 'SelectForm',
   data() {
     return {
-      geoStore: useGeoStore(),
       appStore: useAppStore(),
+      geoStore: useGeoStore(),
+      meteoStore: useMeteoStore(),
       selectedItem: null as HTMLLIElement | null,
     };
   },
@@ -33,10 +37,15 @@ export default {
       if (this.selectedItem && !this.geoStore.isResponseEmpty) {
         this.geoStore.setLocation(this.selectedItem.value);
         this.appStore.isInitialState = false;
-        // try {
-        // } catch (err) {
-        // } finally {
-        // }
+        this.meteoStore.isFetching = true;
+        meteoFetch(this.geoStore.location as ILocation)
+          .then((data) => {
+            if (data) {
+              console.log(data);
+            }
+          })
+          .catch((err) => alert(err))
+          .finally(() => (this.meteoStore.isFetching = false));
       } else {
         alert('Нужно выбрать локацию');
       }

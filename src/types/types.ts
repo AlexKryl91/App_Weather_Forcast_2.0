@@ -18,6 +18,6 @@ export interface ILocation {
   name: string;
   fullName: string;
   countryCode: string;
-  latidute: number;
+  latitude: number;
   longitude: number;
 }

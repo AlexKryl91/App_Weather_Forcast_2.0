@@ -1,3 +1,4 @@
+import AppPreloader from '@/components/AppPreloader/AppPreloader.vue';
 import HeaderBar from '@/components/HeaderBar/HeaderBar.vue';
 import MainTable from '@/components/MainTable/MainTable.vue';
 import TabsBar from '@/components/TabsBar/TabsBar.vue';
@@ -8,6 +9,7 @@ import ModalButton from '@/components/UI/ModalButton.vue';
 import { Transition } from 'vue';
 
 export default [
+  AppPreloader,
   HeaderBar,
   MainTable,
   TabsBar,
