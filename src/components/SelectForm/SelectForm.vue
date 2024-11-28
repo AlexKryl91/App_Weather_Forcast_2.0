@@ -41,11 +41,14 @@ export default {
         meteoFetch(this.geoStore.location as ILocation)
           .then((data) => {
             if (data) {
-              console.log(data);
+              this.meteoStore.meteoDataHandler(data);
             }
           })
           .catch((err) => alert(err))
-          .finally(() => (this.meteoStore.isFetching = false));
+          .finally(() => {
+            this.appStore.isSearchOpened = false;
+            this.meteoStore.isFetching = false;
+          });
       } else {
         alert('Нужно выбрать локацию');
       }

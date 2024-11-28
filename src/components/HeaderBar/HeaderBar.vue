@@ -15,7 +15,10 @@ export default {
   },
   methods: {
     openSearch() {
-      if (!this.appStore.isSearchOpened) {
+      if (this.appStore.isSearchOpened) {
+        this.appStore.isSearchOpened = false;
+        this.geoStore.$reset();
+      } else {
         this.locationInput = '';
         this.appStore.isSearchOpened = true;
         this.appStore.isSettingsOpened = false;
@@ -24,7 +27,9 @@ export default {
       }
     },
     openSettings() {
-      if (!this.appStore.isSettingsOpened) {
+      if (this.appStore.isSettingsOpened) {
+        this.appStore.isSettingsOpened = false;
+      } else {
         this.locationInput = '';
         this.appStore.isSearchOpened = false;
         this.appStore.isSettingsOpened = true;
@@ -38,9 +43,10 @@ export default {
       this.debounceId = setTimeout(() => {
         this.locationInput = value;
         this.geoStore.fetchedList = [];
-        if (value) {
+        const str = value.trim();
+        if (str) {
           this.geoStore.isFetching = true;
-          geoFetch(value)
+          geoFetch(str)
             .then((data) => {
               if (data) {
                 this.geoStore.setFetchedList(data);

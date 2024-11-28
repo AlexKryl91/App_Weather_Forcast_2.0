@@ -1,3 +1,5 @@
+import type { IFetchedMeteoData } from '@/types/types';
+import meteoDataBuilder from '@/utils/meteoDataBuilder';
 import { defineStore } from 'pinia';
 
 export const useMeteoStore = defineStore('meteoStore', {
@@ -6,5 +8,11 @@ export const useMeteoStore = defineStore('meteoStore', {
     meteoData: {},
   }),
   getters: {},
-  actions: {},
+  actions: {
+    meteoDataHandler(data: IFetchedMeteoData) {
+      const rebuildData = meteoDataBuilder(data);
+      console.log(rebuildData);
+      this.meteoData = rebuildData;
+    },
+  },
 });
