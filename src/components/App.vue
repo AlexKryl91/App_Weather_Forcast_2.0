@@ -1,10 +1,12 @@
 <script lang="ts">
 import { useAppStore } from '@/stores/AppStore';
+import { useMeteoStore } from '@/stores/MeteoStore';
 
 export default {
   data() {
     return {
       appStore: useAppStore(),
+      meteoStore: useMeteoStore(),
       isLoading: true,
     };
   },
@@ -50,6 +52,8 @@ export default {
         <SettingsList />
       </ModalWindow>
     </Transition>
+
+    <FetchLoader v-if="meteoStore.isFetching" />
   </div>
 </template>
 

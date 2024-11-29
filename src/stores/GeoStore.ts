@@ -8,7 +8,6 @@ export const useGeoStore = defineStore('geoStore', {
     fetchedList: [] as IGeoData[],
     location: null as ILocation | null,
   }),
-  // getters: {},
   actions: {
     setFetchedList(data: IGeoData[]) {
       const filtered = data.filter((item) => item.country);

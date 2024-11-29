@@ -7,6 +7,4 @@ export const useAppStore = defineStore('appStore', {
     isPreConf: false,
     isInitialState: true,
   }),
-  // getters: {},
-  // actions: {},
 });

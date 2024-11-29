@@ -1,86 +1,55 @@
 <script lang="ts">
+import { useAppStore } from '@/stores/AppStore';
+import { useMeteoStore } from '@/stores/MeteoStore';
+
 export default {
   data() {
     return {
-      tabsData: [
-        {
-          dow: 'Сегодня',
-          date: '12 ноября',
-          icon: '',
-          temp: '+2°С',
-          status: true,
-        },
-        {
-          dow: 'Завтра',
-          date: '13 ноября',
-          icon: '',
-          temp: '+2°С',
-          status: false,
-        },
-        {
-          dow: 'Четверг',
-          date: '14 ноября',
-          icon: '',
-          temp: '+2°С',
-          status: false,
-        },
-        {
-          dow: 'Пятница',
-          date: '15 ноября',
-          icon: '',
-          temp: '+2°С',
-          status: false,
-        },
-        {
-          dow: 'Суббота',
-          date: '16 ноября',
-          icon: '',
-          temp: '+2°С',
-          status: false,
-        },
-        {
-          dow: 'Воскресенье',
-          date: '17 ноября',
-          icon: '',
-          temp: '+2°С',
-          status: false,
-        },
-        {
-          dow: 'Понедельник',
-          date: '18 ноября',
-          icon: '',
-          temp: '+2°С',
-          status: false,
-        },
-      ],
+      meteoStore: useMeteoStore(),
+      appStore: useAppStore(),
+      currentDay: 0,
     };
+  },
+  methods: {
+    selectDay(e: Event) {
+      const node = e.target as HTMLUListElement;
+      if (node.closest('li')) {
+        const item = node.closest('li') as HTMLLIElement;
+        if (this.currentDay !== item.value) {
+          this.currentDay = item.value;
+          this.meteoStore.currentTab = item.value;
+          this.meteoStore.setCurrentMData(item.value);
+        }
+      }
+    },
   },
   name: 'TabsBar',
 };
 </script>
 
 <template>
-  <aside class="tabs">
-    <div
-      v-for="tab in tabsData"
-      v-bind:key="tab.dow"
+  <ul @click="selectDay" class="tabs">
+    <li
+      v-for="(tab, index) in meteoStore.meteoData.daily"
+      v-bind:key="tab.date"
       class="tabs__day"
-      :class="{ active: tab.status }"
+      :class="{ active: currentDay === index }"
+      :value="index"
     >
       <div>
         <div class="dow">{{ tab.dow }}</div>
-        <div class="date">{{ tab.date }}</div>
+        <div class="date">{{ tab.dateShort }}</div>
       </div>
       <img
         class="w-icon"
-        src="@/assets/icons/weather_icons/wi_code51.svg"
+        :src="`/src/assets/icons/weather_icons/wi_code${tab.weatherCode}.svg`"
         alt=""
         width="45"
         height="45"
       />
-      <div class="temp">{{ tab.temp }}</div>
-    </div>
-  </aside>
+      <div class="temp">{{ tab.minTemp }}...{{ tab.maxTemp }}</div>
+    </li>
+  </ul>
 </template>
 
 <style scoped src="./TabsBar.scss"></style>

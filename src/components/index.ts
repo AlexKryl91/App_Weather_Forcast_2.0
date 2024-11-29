@@ -7,6 +7,7 @@ import SettingsList from '@/components/SettingsList/SettingsList.vue';
 import ModalWindow from '@/components/UI/ModalWindow.vue';
 import ModalButton from '@/components/UI/ModalButton.vue';
 import { Transition } from 'vue';
+import FetchLoader from './FetchLoader/FetchLoader.vue';
 
 export default [
   AppPreloader,
@@ -17,5 +18,6 @@ export default [
   SettingsList,
   ModalWindow,
   ModalButton,
+  FetchLoader,
   Transition,
 ];

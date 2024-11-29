@@ -35,6 +35,13 @@ function meteoDataBuilder({
     dayData.minTemp = tempFormatter(daily.temperature_2m_min[i]);
     dayData.weatherCode = daily.weather_code[i];
 
+    // const testArr = [] as IReHourlyMeteoData[];
+
+    // for (let j = 0; j < hoursIndexPreset.length; j++) {
+    //   testArr.push({ sunTag: `${j}` });
+    //   console.log(testArr);
+    // }
+
     dayData.hourly = {} as IReHourlyMeteoData;
     dayData.hourly.hours = hoursIndexPreset.map((hour) => `${hour}:00`);
     dayData.hourly.sunTag = dayOrNigth(daily, hoursIndexPreset, i);

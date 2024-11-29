@@ -1,92 +1,51 @@
 <script lang="ts">
-import iconTemp from '@/assets/icons/temp.svg';
-import iconPress from '@/assets/icons/arrow-down.svg';
-import iconWind from '@/assets/icons/wind.svg';
-import iconTornado from '@/assets/icons/tornado.svg';
-import iconCompass from '@/assets/icons/compass.svg';
-import iconDroplet from '@/assets/icons/droplet.svg';
-import iconUmbrella from '@/assets/icons/umbrella.svg';
-import iconCloud from '@/assets/icons/cloud.svg';
-import iconEye from '@/assets/icons/eye.svg';
+import { useAppStore } from '@/stores/AppStore';
+import { useMeteoStore } from '@/stores/MeteoStore';
+import paramsData from '@/utils/paramsTable';
 
 export default {
   name: 'MainTable',
   data() {
     return {
-      paramData: [
-        {
-          icon: iconTemp,
-          iconAlt: 'Иконка температуры',
-          name: 'Ощущается',
-          units: '°С',
-        },
-        {
-          icon: iconPress,
-          iconAlt: 'Иконка давления',
-          name: 'Давление',
-          units: 'мм рт.ст.',
-        },
-        {
-          icon: iconWind,
-          iconAlt: 'Иконка ветра',
-          name: 'Ветер',
-          units: 'м/с',
-        },
-        {
-          icon: iconTornado,
-          iconAlt: 'Иконка торнадо',
-          name: 'Порывы',
-          units: 'м/с',
-        },
-        {
-          icon: iconCompass,
-          iconAlt: 'Иконка компаса',
-          name: 'Направление',
-          units: '',
-        },
-        {
-          icon: iconDroplet,
-          iconAlt: 'Иконка влажности',
-          name: 'Влажность',
-          units: '%',
-        },
-        {
-          icon: iconUmbrella,
-          iconAlt: 'Иконка зонта',
-          name: 'Осадки',
-          units: 'мм',
-        },
-        {
-          icon: iconCloud,
-          iconAlt: 'Иконка облака',
-          name: 'Облачность',
-          units: '%',
-        },
-        {
-          icon: iconEye,
-          iconAlt: 'Иконка глаза',
-          name: 'Видимость',
-          units: 'км',
-        },
-      ],
-      wData: [
-        { time: '6:00' },
-        { time: '9:00' },
-        { time: '12:00' },
-        { time: '15:00' },
-        { time: '18:00' },
-        { time: '21:00' },
-      ],
+      appStore: useAppStore(),
+      meteoStore: useMeteoStore(),
+      paramsData,
+      currentTime: '',
+      timeId: -1,
     };
   },
+  // mounted() {
+  //   this.timeId = setInterval(() => {
+  //     const date = new Date();
+  //     date.setHours(date.getUTCHours() + this.meteoStore.meteoData.utcOffset);
+  //     this.currentTime = date.toLocaleTimeString('ru-RU', {
+  //       hour: '2-digit',
+  //       minute: '2-digit',
+  //     });
+
+  //     // Reload page after 00:00 in chosen location
+  //     if (
+  //       date.getHours() === 0 &&
+  //       date.getMinutes() === 0 &&
+  //       date.getSeconds() === 0
+  //     ) {
+  //       window.location.reload();
+  //     }
+  //   }, 1000);
+  // },
+  // unmounted() {
+  //   clearInterval(this.timeId);
+  // },
 };
 </script>
 
 <template>
   <main class="weather-table">
-    <div class="head-item">
+    <!-- <div class="head-item">
       <div class="date-wrapper">
-        <div class="dow">Вторник</div>
+        <div class="dow">
+          {{ meteoStore.currentMeteoData.dow }}
+        </div>
         <div class="date">
           <img
             src="@/assets/icons/calendar.svg"
@@ -94,21 +53,21 @@ export default {
             width="21"
             height="24"
           />
-          <span>12 ноября</span>
+          <span>{{ meteoStore.currentMeteoData.date }}</span>
         </div>
-        <div class="time">
+        <div v-if="meteoStore.currentTab === 0" class="time">
           <img
             src="@/assets/icons/clock.svg"
             alt="Иконка календаря"
             width="21"
             height="24"
           />
-          <span>14:48</span>
+          <span>{{ currentTime }}</span>
         </div>
       </div>
       <table class="table">
         <tbody>
-          <tr class="param" v-for="param in paramData" v-bind:key="param.name">
+          <tr class="param" v-for="param in paramsData" v-bind:key="param.name">
             <td class="param__icon">
               <img
                 :src="param.icon"
@@ -122,10 +81,32 @@ export default {
           </tr>
         </tbody>
       </table>
-    </div>
-    <div class="w-item" v-for="wItem in wData" v-bind:key="wItem.time">
-      {{ wItem.time }}
-    </div>
+    </div> -->
+    <!-- <div class="w-item" v-for="n in 6" v-bind:key="n">
+      <div class="w-item__hour">
+        {{ meteoStore.currentMeteoData.hourly.hours[n - 1] }}
+      </div>
+      <div class="w-item__icon">
+        {{ meteoStore.currentMeteoData.hourly.weatherCode[n - 1] }}
+      </div>
+      <div class="w-item__temp">
+        {{ meteoStore.currentMeteoData.hourly.temperature[n - 1] }}
+      </div>
+      <div class="w-item__text-code">???</div>
+      <ul class="w-item__list">
+        <li>
+          {{ meteoStore.currentMeteoData.hourly.apparentTemperature[n - 1] }}
+        </li>
+        <li>{{ meteoStore.currentMeteoData.hourly.pressure[n - 1] }}</li>
+        <li>{{ meteoStore.currentMeteoData.hourly.windSpeed[n - 1] }}</li>
+        <li>{{ meteoStore.currentMeteoData.hourly.windGusts[n - 1] }}</li>
+        <li>{{ meteoStore.currentMeteoData.hourly.windDirection[n - 1] }}</li>
+        <li>{{ meteoStore.currentMeteoData.hourly.humidity[n - 1] }}</li>
+        <li>{{ meteoStore.currentMeteoData.hourly.precipitation[n - 1] }}</li>
+        <li>{{ meteoStore.currentMeteoData.hourly.cloudCover[n - 1] }}</li>
+        <li>{{ meteoStore.currentMeteoData.hourly.visibility[n - 1] }}</li>
+      </ul>
+    </div> -->
   </main>
 </template>
 
