@@ -93,19 +93,20 @@ export interface IFetchedMeteoData {
 }
 
 export interface IReHourlyMeteoData {
-  apparentTemperature: number[];
-  cloudCover: number[];
-  hours: string[];
-  humidity: number[];
-  precipitation: number[];
-  pressure: number[];
-  sunTag: string[];
-  temperature: string[];
-  visibility: string[];
-  weatherCode: number[];
-  windDirection: string[];
-  windGusts: string[];
-  windSpeed: string[];
+  apparentTemperature: string;
+  cloudCover: number;
+  hour: string;
+  humidity: number;
+  precipitation: number;
+  pressure: number;
+  sunTag: string;
+  temperature: string;
+  visibility: string;
+  weatherCode: number;
+  weatherDescription: string;
+  windDirection: string;
+  windGusts: string;
+  windSpeed: string;
 }
 
 export interface IReDailyMeteoData {
@@ -116,7 +117,7 @@ export interface IReDailyMeteoData {
   maxTemp: string;
   minTemp: string;
   weatherCode: number;
-  hourly: IReHourlyMeteoData;
+  hourly: IReHourlyMeteoData[];
 }
 
 export interface IReMeteoData {

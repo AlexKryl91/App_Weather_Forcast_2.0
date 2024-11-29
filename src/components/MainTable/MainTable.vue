@@ -14,34 +14,34 @@ export default {
       timeId: -1,
     };
   },
-  // mounted() {
-  //   this.timeId = setInterval(() => {
-  //     const date = new Date();
-  //     date.setHours(date.getUTCHours() + this.meteoStore.meteoData.utcOffset);
-  //     this.currentTime = date.toLocaleTimeString('ru-RU', {
-  //       hour: '2-digit',
-  //       minute: '2-digit',
-  //     });
+  mounted() {
+    this.timeId = setInterval(() => {
+      const date = new Date();
+      date.setHours(date.getUTCHours() + this.meteoStore.meteoData.utcOffset);
+      this.currentTime = date.toLocaleTimeString('ru-RU', {
+        hour: '2-digit',
+        minute: '2-digit',
+      });
 
-  //     // Reload page after 00:00 in chosen location
-  //     if (
-  //       date.getHours() === 0 &&
-  //       date.getMinutes() === 0 &&
-  //       date.getSeconds() === 0
-  //     ) {
-  //       window.location.reload();
-  //     }
-  //   }, 1000);
-  // },
-  // unmounted() {
-  //   clearInterval(this.timeId);
-  // },
+      // Reload page after 00:00 in chosen location
+      if (
+        date.getHours() === 0 &&
+        date.getMinutes() === 0 &&
+        date.getSeconds() === 0
+      ) {
+        window.location.reload();
+      }
+    }, 1000);
+  },
+  unmounted() {
+    clearInterval(this.timeId);
+  },
 };
 </script>
 
 <template>
   <main class="weather-table">
-    <!-- <div class="head-item">
+    <div class="head-item">
       <div class="date-wrapper">
         <div class="dow">
           {{ meteoStore.currentMeteoData.dow }}
@@ -81,32 +81,36 @@ export default {
           </tr>
         </tbody>
       </table>
-    </div> -->
-    <!-- <div class="w-item" v-for="n in 6" v-bind:key="n">
+    </div>
+    <div
+      class="w-item"
+      v-for="data in meteoStore.currentMeteoData.hourly"
+      v-bind:key="data.hour"
+    >
       <div class="w-item__hour">
-        {{ meteoStore.currentMeteoData.hourly.hours[n - 1] }}
+        {{ data.hour }}
       </div>
       <div class="w-item__icon">
-        {{ meteoStore.currentMeteoData.hourly.weatherCode[n - 1] }}
+        {{ data.weatherCode }}
       </div>
       <div class="w-item__temp">
-        {{ meteoStore.currentMeteoData.hourly.temperature[n - 1] }}
+        {{ data.temperature }}
       </div>
-      <div class="w-item__text-code">???</div>
+      <div class="w-item__text-code">{{ data.weatherDescription }}</div>
       <ul class="w-item__list">
         <li>
-          {{ meteoStore.currentMeteoData.hourly.apparentTemperature[n - 1] }}
+          {{ data.apparentTemperature }}
         </li>
-        <li>{{ meteoStore.currentMeteoData.hourly.pressure[n - 1] }}</li>
-        <li>{{ meteoStore.currentMeteoData.hourly.windSpeed[n - 1] }}</li>
-        <li>{{ meteoStore.currentMeteoData.hourly.windGusts[n - 1] }}</li>
-        <li>{{ meteoStore.currentMeteoData.hourly.windDirection[n - 1] }}</li>
-        <li>{{ meteoStore.currentMeteoData.hourly.humidity[n - 1] }}</li>
-        <li>{{ meteoStore.currentMeteoData.hourly.precipitation[n - 1] }}</li>
-        <li>{{ meteoStore.currentMeteoData.hourly.cloudCover[n - 1] }}</li>
-        <li>{{ meteoStore.currentMeteoData.hourly.visibility[n - 1] }}</li>
+        <li>{{ data.pressure }}</li>
+        <li>{{ data.windSpeed }}</li>
+        <li>{{ data.windGusts }}</li>
+        <li>{{ data.windDirection }}</li>
+        <li>{{ data.humidity }}</li>
+        <li>{{ data.precipitation }}</li>
+        <li>{{ data.cloudCover }}</li>
+        <li>{{ data.visibility }}</li>
       </ul>
-    </div> -->
+    </div>
   </main>
 </template>
 

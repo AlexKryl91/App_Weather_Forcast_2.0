@@ -6,11 +6,10 @@ import type {
 } from '@/types/types';
 import {
   tempFormatter,
-  dataHourFilter,
   distanceFormatter,
   directionDegFormatter,
-  dayOrNigth,
   dateSetCreator,
+  weatherCodeDescription,
 } from './dataBuilderHelpers';
 
 function meteoDataBuilder({
@@ -35,82 +34,82 @@ function meteoDataBuilder({
     dayData.minTemp = tempFormatter(daily.temperature_2m_min[i]);
     dayData.weatherCode = daily.weather_code[i];
 
-    // const testArr = [] as IReHourlyMeteoData[];
+    dayData.hourly = [] as IReHourlyMeteoData[];
 
-    // for (let j = 0; j < hoursIndexPreset.length; j++) {
-    //   testArr.push({ sunTag: `${j}` });
-    //   console.log(testArr);
-    // }
+    for (let j = 0; j < hoursIndexPreset.length; j++) {
+      const hIndex = hoursIndexPreset[j];
+      const hourlyData = {} as IReHourlyMeteoData;
+      hourlyData.hour = `${hIndex}:00`;
+      hourlyData.sunTag =
+        hoursIndexPreset[hIndex] > new Date(daily.sunrise[i]).getHours() &&
+        hoursIndexPreset[hIndex] < new Date(daily.sunset[i]).getHours()
+          ? 'day'
+          : 'night';
 
-    dayData.hourly = {} as IReHourlyMeteoData;
-    dayData.hourly.hours = hoursIndexPreset.map((hour) => `${hour}:00`);
-    dayData.hourly.sunTag = dayOrNigth(daily, hoursIndexPreset, i);
+      hourlyData.weatherCode = (() => {
+        return hourly.weather_code.slice(i * 24, (i + 1) * 24)[hIndex];
+      })();
 
-    dayData.hourly.weatherCode = dataHourFilter(
-      hourly.weather_code,
-      hoursIndexPreset,
-      i,
-    );
+      hourlyData.weatherDescription = (() => {
+        const value = hourly.weather_code.slice(i * 24, (i + 1) * 24)[hIndex];
+        return weatherCodeDescription(value);
+      })();
 
-    dayData.hourly.temperature = dataHourFilter(
-      hourly.temperature_2m,
-      hoursIndexPreset,
-      i,
-    ).map(tempFormatter);
+      hourlyData.temperature = (() => {
+        const value = hourly.temperature_2m.slice(i * 24, (i + 1) * 24)[hIndex];
+        const res = Math.round(value);
+        return `${res > 0 ? '+' : ''}${res}`;
+      })();
 
-    dayData.hourly.apparentTemperature = dataHourFilter(
-      hourly.apparent_temperature,
-      hoursIndexPreset,
-      i,
-    );
+      hourlyData.apparentTemperature = (() => {
+        const value = hourly.apparent_temperature.slice(i * 24, (i + 1) * 24)[
+          hIndex
+        ];
+        const res = Math.round(value);
+        return `${res > 0 ? '+' : ''}${res}`;
+      })();
 
-    dayData.hourly.pressure = dataHourFilter(
-      hourly.surface_pressure,
-      hoursIndexPreset,
-      i,
-    ).map((el) => Math.round(el * 0.750062));
+      hourlyData.pressure = (() => {
+        const value = hourly.surface_pressure.slice(i * 24, (i + 1) * 24)[
+          hIndex
+        ];
+        return Math.round(value * 0.750062);
+      })();
 
-    dayData.hourly.windSpeed = dataHourFilter(
-      hourly.wind_speed_10m,
-      hoursIndexPreset,
-      i,
-    ).map((el) => el.toFixed(1));
+      hourlyData.windSpeed = (() => {
+        const value = hourly.wind_speed_10m.slice(i * 24, (i + 1) * 24)[hIndex];
+        return value.toFixed(1);
+      })();
 
-    dayData.hourly.windGusts = dataHourFilter(
-      hourly.wind_gusts_10m,
-      hoursIndexPreset,
-      i,
-    ).map((el) => el.toFixed(1));
+      hourlyData.windGusts = (() => {
+        const value = hourly.wind_gusts_10m.slice(i * 24, (i + 1) * 24)[hIndex];
+        return value.toFixed(1);
+      })();
 
-    dayData.hourly.windDirection = dataHourFilter(
-      hourly.wind_direction_10m,
-      hoursIndexPreset,
-      i,
-    ).map(directionDegFormatter);
+      hourlyData.windDirection = (() => {
+        const value = hourly.wind_gusts_10m.slice(i * 24, (i + 1) * 24)[hIndex];
+        return directionDegFormatter(value);
+      })();
 
-    dayData.hourly.humidity = dataHourFilter(
-      hourly.relative_humidity_2m,
-      hoursIndexPreset,
-      i,
-    );
+      hourlyData.humidity = (() => {
+        return hourly.relative_humidity_2m.slice(i * 24, (i + 1) * 24)[hIndex];
+      })();
 
-    dayData.hourly.precipitation = dataHourFilter(
-      hourly.precipitation,
-      hoursIndexPreset,
-      i,
-    );
+      hourlyData.precipitation = (() => {
+        return hourly.precipitation.slice(i * 24, (i + 1) * 24)[hIndex];
+      })();
 
-    dayData.hourly.cloudCover = dataHourFilter(
-      hourly.cloud_cover,
-      hoursIndexPreset,
-      i,
-    );
+      hourlyData.cloudCover = (() => {
+        return hourly.cloud_cover.slice(i * 24, (i + 1) * 24)[hIndex];
+      })();
 
-    dayData.hourly.visibility = dataHourFilter(
-      hourly.visibility,
-      hoursIndexPreset,
-      i,
-    ).map(distanceFormatter);
+      hourlyData.visibility = (() => {
+        const value = hourly.visibility.slice(i * 24, (i + 1) * 24)[hIndex];
+        return distanceFormatter(value);
+      })();
+
+      dayData.hourly.push(hourlyData);
+    }
 
     result.daily.push(dayData);
   }
