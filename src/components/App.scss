@@ -13,13 +13,34 @@ body {
   align-items: center;
   justify-content: center;
 
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.winter {
+  background-image: image-set(
+    url('@/assets/img/bg_winter.avif') type('image/avif'),
+    url('@/assets/img/bg_winter.jpg') type('image/jpeg')
+  );
+}
+.spring {
+  background-image: image-set(
+    url('@/assets/img/bg_spring.avif') type('image/avif'),
+    url('@/assets/img/bg_spring.jpg') type('image/jpeg')
+  );
+}
+.summer {
+  background-image: image-set(
+    url('@/assets/img/bg_summer.avif') type('image/avif'),
+    url('@/assets/img/bg_summer.jpg') type('image/jpeg')
+  );
+}
+.autumn {
   background-image: image-set(
     url('@/assets/img/bg_autumn.avif') type('image/avif'),
     url('@/assets/img/bg_autumn.jpg') type('image/jpeg')
   );
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
 }
 
 .container {

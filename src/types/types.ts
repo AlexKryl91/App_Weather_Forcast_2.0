@@ -99,7 +99,7 @@ export interface IReHourlyMeteoData {
   humidity: number;
   precipitation: number;
   pressure: number;
-  sunTag: string;
+  sunTag: 'day' | 'night';
   temperature: string;
   visibility: string;
   weatherCode: number;

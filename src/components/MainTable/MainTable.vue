@@ -14,6 +14,16 @@ export default {
       timeId: -1,
     };
   },
+  methods: {
+    getWIconUrl(sunTag: 'day' | 'night', wCode: number) {
+      const isValidCode = wCode === 0 || wCode === 1 || wCode === 2;
+      if (isValidCode && sunTag === 'night') {
+        return `/src/assets/icons/weather_icons/wi_code${wCode}_night.svg`;
+      } else {
+        return `/src/assets/icons/weather_icons/wi_code${wCode}.svg`;
+      }
+    },
+  },
   mounted() {
     this.timeId = setInterval(() => {
       const date = new Date();
@@ -90,9 +100,11 @@ export default {
       <div class="w-item__hour">
         {{ data.hour }}
       </div>
-      <div class="w-item__icon">
-        {{ data.weatherCode }}
-      </div>
+      <img
+        class="w-item__icon"
+        :src="getWIconUrl(data.sunTag, data.weatherCode)"
+        :alt="data.weatherDescription"
+      />
       <div class="w-item__temp">
         {{ data.temperature }}
       </div>

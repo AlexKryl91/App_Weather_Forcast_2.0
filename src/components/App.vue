@@ -8,6 +8,7 @@ export default {
       appStore: useAppStore(),
       meteoStore: useMeteoStore(),
       isLoading: true,
+      season: '',
     };
   },
   beforeMount() {
@@ -17,6 +18,30 @@ export default {
     } else {
       console.log('Local Storage is Empty');
     }
+
+    const month = new Date().getMonth();
+    switch (month) {
+      case 0:
+      case 1:
+      case 11:
+        this.season = 'winter';
+        break;
+      case 2:
+      case 3:
+      case 4:
+        this.season = 'spring';
+        break;
+      case 5:
+      case 6:
+      case 7:
+        this.season = 'summer';
+        break;
+      case 8:
+      case 9:
+      case 10:
+        this.season = 'autumn';
+        break;
+    }
   },
   mounted() {
     document.onreadystatechange = () => {
@@ -24,6 +49,7 @@ export default {
         this.isLoading = false;
       }
     };
+    document.querySelector('#app')?.classList.add(this.season);
   },
 };
 </script>

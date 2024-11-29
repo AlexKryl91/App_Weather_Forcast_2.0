@@ -5,11 +5,13 @@ import type {
   IReMeteoData,
 } from '@/types/types';
 import {
+  dateSetCreator,
   tempFormatter,
+  dayOrNigthTag,
   distanceFormatter,
   directionDegFormatter,
-  dateSetCreator,
   weatherCodeDescription,
+  dataSlicer,
 } from './dataBuilderHelpers';
 
 function meteoDataBuilder({
@@ -18,98 +20,55 @@ function meteoDataBuilder({
   hourly,
 }: IFetchedMeteoData) {
   const hoursIndexPreset = [6, 9, 12, 15, 18, 21];
-
   const result = {} as IReMeteoData;
 
   result.utcOffset = utc_offset_seconds / 3600;
   result.daily = [] as IReDailyMeteoData[];
 
   for (let i = 0; i < 7; i++) {
-    const dayData = Object.assign(
-      {},
-      dateSetCreator(daily.time[i]),
-    ) as IReDailyMeteoData;
+    const dayData = dateSetCreator(daily.time[i]) as IReDailyMeteoData;
 
     dayData.maxTemp = tempFormatter(daily.temperature_2m_max[i]);
     dayData.minTemp = tempFormatter(daily.temperature_2m_min[i]);
     dayData.weatherCode = daily.weather_code[i];
-
     dayData.hourly = [] as IReHourlyMeteoData[];
 
-    for (let j = 0; j < hoursIndexPreset.length; j++) {
-      const hIndex = hoursIndexPreset[j];
+    hoursIndexPreset.forEach((hour) => {
       const hourlyData = {} as IReHourlyMeteoData;
-      hourlyData.hour = `${hIndex}:00`;
-      hourlyData.sunTag =
-        hoursIndexPreset[hIndex] > new Date(daily.sunrise[i]).getHours() &&
-        hoursIndexPreset[hIndex] < new Date(daily.sunset[i]).getHours()
-          ? 'day'
-          : 'night';
 
-      hourlyData.weatherCode = (() => {
-        return hourly.weather_code.slice(i * 24, (i + 1) * 24)[hIndex];
-      })();
-
-      hourlyData.weatherDescription = (() => {
-        const value = hourly.weather_code.slice(i * 24, (i + 1) * 24)[hIndex];
-        return weatherCodeDescription(value);
-      })();
-
-      hourlyData.temperature = (() => {
-        const value = hourly.temperature_2m.slice(i * 24, (i + 1) * 24)[hIndex];
-        const res = Math.round(value);
-        return `${res > 0 ? '+' : ''}${res}`;
-      })();
-
-      hourlyData.apparentTemperature = (() => {
-        const value = hourly.apparent_temperature.slice(i * 24, (i + 1) * 24)[
-          hIndex
-        ];
-        const res = Math.round(value);
-        return `${res > 0 ? '+' : ''}${res}`;
-      })();
-
-      hourlyData.pressure = (() => {
-        const value = hourly.surface_pressure.slice(i * 24, (i + 1) * 24)[
-          hIndex
-        ];
-        return Math.round(value * 0.750062);
-      })();
-
-      hourlyData.windSpeed = (() => {
-        const value = hourly.wind_speed_10m.slice(i * 24, (i + 1) * 24)[hIndex];
-        return value.toFixed(1);
-      })();
-
-      hourlyData.windGusts = (() => {
-        const value = hourly.wind_gusts_10m.slice(i * 24, (i + 1) * 24)[hIndex];
-        return value.toFixed(1);
-      })();
-
-      hourlyData.windDirection = (() => {
-        const value = hourly.wind_gusts_10m.slice(i * 24, (i + 1) * 24)[hIndex];
-        return directionDegFormatter(value);
-      })();
-
-      hourlyData.humidity = (() => {
-        return hourly.relative_humidity_2m.slice(i * 24, (i + 1) * 24)[hIndex];
-      })();
-
-      hourlyData.precipitation = (() => {
-        return hourly.precipitation.slice(i * 24, (i + 1) * 24)[hIndex];
-      })();
-
-      hourlyData.cloudCover = (() => {
-        return hourly.cloud_cover.slice(i * 24, (i + 1) * 24)[hIndex];
-      })();
-
-      hourlyData.visibility = (() => {
-        const value = hourly.visibility.slice(i * 24, (i + 1) * 24)[hIndex];
-        return distanceFormatter(value);
-      })();
+      hourlyData.hour = `${hour}:00`;
+      hourlyData.sunTag = dayOrNigthTag(daily, hour, i);
+      hourlyData.weatherCode = dataSlicer(hourly.weather_code, i, hour);
+      hourlyData.weatherDescription = weatherCodeDescription(
+        dataSlicer(hourly.weather_code, i, hour),
+      );
+      hourlyData.temperature = tempFormatter(
+        dataSlicer(hourly.temperature_2m, i, hour),
+      );
+      hourlyData.apparentTemperature = tempFormatter(
+        dataSlicer(hourly.apparent_temperature, i, hour),
+      );
+      hourlyData.pressure = Math.round(
+        dataSlicer(hourly.surface_pressure, i, hour) * 0.750062,
+      );
+      hourlyData.windSpeed = dataSlicer(hourly.wind_speed_10m, i, hour).toFixed(
+        1,
+      );
+      hourlyData.windGusts = dataSlicer(hourly.wind_gusts_10m, i, hour).toFixed(
+        1,
+      );
+      hourlyData.windDirection = directionDegFormatter(
+        dataSlicer(hourly.wind_direction_10m, i, hour),
+      );
+      hourlyData.humidity = dataSlicer(hourly.relative_humidity_2m, i, hour);
+      hourlyData.precipitation = dataSlicer(hourly.precipitation, i, hour);
+      hourlyData.cloudCover = dataSlicer(hourly.cloud_cover, i, hour);
+      hourlyData.visibility = distanceFormatter(
+        dataSlicer(hourly.visibility, i, hour),
+      );
 
       dayData.hourly.push(hourlyData);
-    }
+    });
 
     result.daily.push(dayData);
   }

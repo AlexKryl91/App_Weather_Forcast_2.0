@@ -28,35 +28,27 @@ export function dateSetCreator(timestamp: string) {
   };
 }
 
+export function dayOrNigthTag(
+  daily: IDailyMeteoData,
+  hour: number,
+  index: number,
+): 'day' | 'night' {
+  const sunriseHour = new Date(daily.sunrise[index]).getHours();
+  const sunsetHour = new Date(daily.sunset[index]).getHours();
+  return hour > sunriseHour && hour < sunsetHour ? 'day' : 'night';
+}
+
+export function dataSlicer(data: number[], index: number, hour: number) {
+  return data.slice(index * 24, (index + 1) * 24)[hour];
+}
+
 export function tempFormatter(value: number) {
   const res = Math.round(value);
   return `${res > 0 ? '+' : ''}${res}`;
 }
 
-export function dataHourFilter(
-  arr: number[],
-  hoursArr: number[],
-  index: number,
-) {
-  return arr
-    .slice(index * 24, (index + 1) * 24)
-    .filter((el, i) => hoursArr.includes(i));
-}
-
 export function distanceFormatter(value: number) {
   return (value / 1000).toFixed(1);
-}
-
-export function dayOrNigth(
-  daily: IDailyMeteoData,
-  hoursArr: number[],
-  index: number,
-) {
-  const sunriseHour = new Date(daily.sunrise[index]).getHours();
-  const sunsetHour = new Date(daily.sunset[index]).getHours();
-  return hoursArr.map((el) =>
-    el > sunriseHour && el < sunsetHour ? 'day' : 'night',
-  );
 }
 
 export function directionDegFormatter(deg: number): string {

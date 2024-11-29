@@ -37,7 +37,9 @@ export default {
       :value="index"
     >
       <div>
-        <div class="dow">{{ tab.dow }}</div>
+        <div class="dow">
+          {{ index === 0 ? 'Сегодня' : index === 1 ? 'Завтра' : tab.dow }}
+        </div>
         <div class="date">{{ tab.dateShort }}</div>
       </div>
       <img
