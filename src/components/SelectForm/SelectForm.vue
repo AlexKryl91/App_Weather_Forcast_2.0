@@ -42,9 +42,17 @@ export default {
           .then((data) => {
             if (data) {
               this.meteoStore.meteoDataHandler(data);
+              sessionStorage.setItem(
+                'locationCache',
+                JSON.stringify(this.geoStore.location),
+              );
             }
           })
-          .catch((err) => alert(err))
+          .catch(() => {
+            this.appStore.isSearchOpened = false;
+            this.appStore.isError = true;
+            this.appStore.errorCode = 'meteofetch';
+          })
           .finally(() => {
             this.appStore.isSearchOpened = false;
             this.meteoStore.isFetching = false;
@@ -55,7 +63,7 @@ export default {
     },
     closeSearch() {
       this.appStore.isSearchOpened = false;
-      this.geoStore.$reset();
+      this.geoStore.fetchedList = [];
     },
   },
 };

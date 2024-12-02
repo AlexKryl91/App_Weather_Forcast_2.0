@@ -1,7 +1,10 @@
 <script lang="ts">
 import { useAppStore } from '@/stores/AppStore';
+import { useGeoStore } from '@/stores/GeoStore';
 import { useMeteoStore } from '@/stores/MeteoStore';
 import paramsData from '@/utils/paramsTable';
+import meteoFetch from '@/API/meteoFetch';
+import type { ILocation } from '@/types/types';
 
 export default {
   name: 'MainTable',
@@ -9,6 +12,7 @@ export default {
     return {
       appStore: useAppStore(),
       meteoStore: useMeteoStore(),
+      geoStore: useGeoStore(),
       paramsData,
       currentTime: '',
       timeId: -1,
@@ -22,6 +26,11 @@ export default {
       } else {
         return `/src/assets/icons/weather_icons/wi_code${wCode}.svg`;
       }
+    },
+    horizontalScroll(e: WheelEvent) {
+      e.preventDefault();
+      const wTable = document.querySelector('.weather-table') as HTMLElement;
+      wTable.scrollLeft += e.deltaY;
     },
   },
   mounted() {
@@ -39,7 +48,20 @@ export default {
         date.getMinutes() === 0 &&
         date.getSeconds() === 0
       ) {
-        window.location.reload();
+        this.meteoStore.isFetching = true;
+        meteoFetch(this.geoStore.location as ILocation)
+          .then((data) => {
+            if (data) {
+              this.meteoStore.meteoDataHandler(data);
+            }
+          })
+          .catch(() => {
+            this.appStore.isError = true;
+            this.appStore.errorCode = 'meteofetch';
+          })
+          .finally(() => {
+            this.meteoStore.isFetching = false;
+          });
       }
     }, 1000);
   },
@@ -50,7 +72,7 @@ export default {
 </script>
 
 <template>
-  <main class="weather-table">
+  <main @wheel="horizontalScroll" class="weather-table">
     <div class="head-item">
       <div class="date-wrapper">
         <div class="dow">
@@ -58,12 +80,25 @@ export default {
         </div>
         <div class="date">
           <img
+            class="calendar-icon"
             src="@/assets/icons/calendar.svg"
             alt="Иконка календаря"
             width="21"
             height="24"
           />
           <span>{{ meteoStore.currentMeteoData.date }}</span>
+        </div>
+        <div class="place">
+          <img
+            class="flag-icon"
+            :src="`/src/assets/icons/flag_icons/fi_${geoStore.location?.countryCode}.svg`"
+            alt="Иконка флага"
+            width="21"
+            height="24"
+          />
+          <span>
+            {{ geoStore.location?.name }}
+          </span>
         </div>
         <div v-if="meteoStore.currentTab === 0" class="time">
           <img
@@ -97,18 +132,22 @@ export default {
       v-for="data in meteoStore.currentMeteoData.hourly"
       v-bind:key="data.hour"
     >
-      <div class="w-item__hour">
-        {{ data.hour }}
+      <div class="w-item__top">
+        <div class="w-item-top__hour">
+          {{ data.hour }}
+        </div>
+        <img
+          class="w-item-top__icon"
+          :src="getWIconUrl(data.sunTag, data.weatherCode)"
+          :alt="data.weatherDescription"
+          width="100"
+          height="100"
+        />
+        <div class="w-item-top__temp">
+          {{ data.temperature }}
+        </div>
+        <div class="w-item-top__desc">{{ data.weatherDescription }}</div>
       </div>
-      <img
-        class="w-item__icon"
-        :src="getWIconUrl(data.sunTag, data.weatherCode)"
-        :alt="data.weatherDescription"
-      />
-      <div class="w-item__temp">
-        {{ data.temperature }}
-      </div>
-      <div class="w-item__text-code">{{ data.weatherDescription }}</div>
       <ul class="w-item__list">
         <li>
           {{ data.apparentTemperature }}

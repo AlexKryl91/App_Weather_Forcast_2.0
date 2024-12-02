@@ -4,7 +4,8 @@ export const useAppStore = defineStore('appStore', {
   state: () => ({
     isSearchOpened: false,
     isSettingsOpened: false,
-    isPreConf: false,
     isInitialState: true,
+    isError: false,
+    errorCode: 'none' as 'geofetch' | 'meteofetch' | 'none',
   }),
 });

@@ -1,22 +1,47 @@
 <script lang="ts">
 import { useAppStore } from '@/stores/AppStore';
 import { useMeteoStore } from '@/stores/MeteoStore';
+import type { ILocation } from '@/types/types';
+import meteoFetch from '@/API/meteoFetch';
+import { useGeoStore } from '@/stores/GeoStore';
+
+type TSeason = 'winter' | 'spring' | 'summer' | 'autumn';
 
 export default {
   data() {
     return {
       appStore: useAppStore(),
+      geoStore: useGeoStore(),
       meteoStore: useMeteoStore(),
       isLoading: true,
-      season: '',
+      season: '' as TSeason,
     };
   },
   beforeMount() {
     if (localStorage.getItem('preset')) {
       console.log('Local Storage is Not Empty');
-      this.appStore.isPreConf = true;
+      this.appStore.isInitialState = false;
     } else {
       console.log('Local Storage is Empty');
+    }
+    if (sessionStorage.getItem('locationCache')) {
+      const cache = sessionStorage.getItem('locationCache') as string;
+      const location = JSON.parse(cache);
+      this.appStore.isInitialState = false;
+      this.geoStore.location = location;
+      meteoFetch(location as ILocation)
+        .then((data) => {
+          if (data) {
+            this.meteoStore.meteoDataHandler(data);
+          }
+        })
+        .catch(() => {
+          this.appStore.isError = true;
+          this.appStore.errorCode = 'meteofetch';
+        })
+        .finally(() => {
+          this.meteoStore.isFetching = false;
+        });
     }
 
     const month = new Date().getMonth();
@@ -60,11 +85,25 @@ export default {
   </Transition>
   <div v-show="!isLoading" class="container">
     <HeaderBar />
-    <div v-if="appStore.isInitialState" class="init">
-      <span>Укажите локацию, в которой хотели бы узнать погоду</span>
+    <div v-if="appStore.isInitialState && !appStore.isError" class="msg">
+      <span class="init"
+        >Укажите локацию, в которой хотели бы узнать погоду</span
+      >
     </div>
-    <MainTable v-if="!appStore.isInitialState" />
-    <TabsBar v-if="!appStore.isInitialState" />
+    <div v-if="appStore.isError" class="msg err">
+      <span class="err__header"
+        >Ошибка запроса
+        {{
+          appStore.errorCode === 'geofetch' ? 'геоданных' : 'метеоданных'
+        }}</span
+      >
+      <span class="err__desc"
+        >Ой! Кажется что-то пошло не так... Поробуйте повторить запрос
+        позднее</span
+      >
+    </div>
+    <MainTable v-if="!appStore.isInitialState && !appStore.isError" />
+    <TabsBar v-if="!appStore.isInitialState && !appStore.isError" />
 
     <Transition name="slide">
       <ModalWindow v-if="appStore.isSearchOpened">

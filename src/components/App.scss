@@ -62,14 +62,28 @@ body {
   overflow: hidden;
 }
 
-.init {
+.msg {
   width: 100%;
   height: 100%;
   text-align: center;
   font-size: 24px;
-  color: var(--color-grey-dark);
 
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
+  row-gap: 30px;
+}
+
+.init {
+  color: var(--color-grey-dark);
+}
+
+.err {
+  color: #b31e1e;
+
+  &__header {
+    font-size: 32px;
+    font-weight: 500;
+  }
 }

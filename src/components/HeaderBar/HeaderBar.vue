@@ -17,7 +17,7 @@ export default {
     openSearch() {
       if (this.appStore.isSearchOpened) {
         this.appStore.isSearchOpened = false;
-        this.geoStore.$reset();
+        this.geoStore.fetchedList = [];
       } else {
         this.locationInput = '';
         this.appStore.isSearchOpened = true;
@@ -33,7 +33,8 @@ export default {
         this.locationInput = '';
         this.appStore.isSearchOpened = false;
         this.appStore.isSettingsOpened = true;
-        this.geoStore.$reset();
+        this.geoStore.fetchedList = [];
+        this.geoStore.isResponseEmpty = false;
       }
     },
   },
@@ -50,11 +51,17 @@ export default {
             .then((data) => {
               if (data) {
                 this.geoStore.setFetchedList(data);
+                this.appStore.isError = false;
+                this.appStore.errorCode = 'none';
               } else {
                 this.geoStore.setEmptyResponse();
               }
             })
-            .catch((err) => alert(err))
+            .catch(() => {
+              this.appStore.isSearchOpened = false;
+              this.appStore.isError = true;
+              this.appStore.errorCode = 'geofetch';
+            })
             .finally(() => (this.geoStore.isFetching = false));
         }
       }, 500);

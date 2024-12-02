@@ -67,16 +67,17 @@
 
     @keyframes pulse {
       0% {
-        box-shadow: 0 0 0 0 #fff;
+        box-shadow: 0 0 0 0 #056ca099;
       }
       75% {
-        box-shadow: 0 0 0 14px #fff0;
+        box-shadow: 0 0 0 12px #fff0;
       }
     }
 
     .settings-btn {
       margin-inline: 20px 10px;
       background: none;
+      border-radius: 50%;
 
       svg {
         transition: var(--transition-duration);

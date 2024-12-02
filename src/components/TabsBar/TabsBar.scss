@@ -8,7 +8,8 @@
     height: 140px;
     padding: 10px 15px;
     background: var(--color-tab-bg);
-    border: var(--border-tab);
+    box-shadow: 2px 4px 4px #00000040;
+
     border-radius: 10px;
     color: var(--color-grey-dark);
 
@@ -21,12 +22,13 @@
     .dow {
       font-size: 18px;
       font-weight: 500;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
       text-transform: capitalize;
     }
 
     .date {
       font-size: 14px;
+      color: var(--color-grey-medium);
     }
 
     .w-icon {
@@ -42,6 +44,8 @@
 
   .active {
     background: none;
+    border: var(--border-tab);
+    box-shadow: none;
   }
 }
 

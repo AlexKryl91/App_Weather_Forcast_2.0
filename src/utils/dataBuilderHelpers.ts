@@ -73,7 +73,7 @@ export function directionDegFormatter(deg: number): string {
 export function weatherCodeDescription(code: number) {
   const desc: Record<number, string> = {
     0: 'Чистое небо',
-    1: 'Преимущественно ясно',
+    1: 'Большей частью ясно',
     2: 'Переменная облачность',
     3: 'Пасмурно',
     45: 'Легкий туман',
