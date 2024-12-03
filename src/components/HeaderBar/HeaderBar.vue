@@ -44,10 +44,10 @@ export default {
       this.debounceId = setTimeout(() => {
         this.locationInput = value;
         this.geoStore.fetchedList = [];
-        const str = value.trim();
-        if (str) {
+
+        if (value) {
           this.geoStore.isFetching = true;
-          geoFetch(str)
+          geoFetch(value)
             .then((data) => {
               if (data) {
                 this.geoStore.setFetchedList(data);
@@ -87,7 +87,7 @@ export default {
     <div class="tools-wrapper">
       <input
         ref="search"
-        v-model="locationInput"
+        v-model.trim="locationInput"
         class="search-bar"
         :class="{ 'search-bar_active': appStore.isSearchOpened }"
         type="text"

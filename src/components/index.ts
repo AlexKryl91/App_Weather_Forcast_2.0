@@ -8,6 +8,7 @@ import ModalWindow from '@/components/UI/ModalWindow.vue';
 import ModalButton from '@/components/UI/ModalButton.vue';
 import { Transition } from 'vue';
 import FetchLoader from './FetchLoader/FetchLoader.vue';
+import ToggleSwitch from './UI/ToggleSwitch.vue';
 
 export default [
   AppPreloader,
@@ -19,5 +20,6 @@ export default [
   ModalWindow,
   ModalButton,
   FetchLoader,
+  ToggleSwitch,
   Transition,
 ];

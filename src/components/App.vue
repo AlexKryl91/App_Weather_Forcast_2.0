@@ -113,7 +113,6 @@ export default {
 
     <Transition name="slide">
       <ModalWindow v-if="appStore.isSettingsOpened">
-        Окно настроек
         <SettingsList />
       </ModalWindow>
     </Transition>
