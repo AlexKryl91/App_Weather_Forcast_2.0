@@ -8,6 +8,12 @@
   transition: var(--transition-duration);
 }
 
+.disabled {
+  pointer-events: none;
+  color: var(--color-grey-medium);
+  background-color: var(--color-grey-light);
+}
+
 @media (hover: hover) {
   .modal-btn:hover {
     background-color: var(--color-btn-darkblue);

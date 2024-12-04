@@ -24,6 +24,7 @@ export default {
     },
     selectLocation(e: Event) {
       const node = e.target as HTMLUListElement;
+      console.log(node)
       if (node.closest('li')) {
         const item = node.closest('li') as HTMLLIElement;
         if (this.selectedItem?.value !== item.value) {

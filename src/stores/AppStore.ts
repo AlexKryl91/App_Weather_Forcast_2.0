@@ -7,5 +7,8 @@ export const useAppStore = defineStore('appStore', {
     isInitialState: true,
     isError: false,
     errorCode: 'none' as 'geofetch' | 'meteofetch' | 'none',
+    saveLocation: false,
+    isCustomHours: false,
+    hourList: [6, 9, 12, 15, 18, 21] as number[],
   }),
 });

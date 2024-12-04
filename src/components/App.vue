@@ -18,9 +18,9 @@ export default {
     };
   },
   beforeMount() {
-    if (localStorage.getItem('preset')) {
-      console.log('Local Storage is Not Empty');
+    if (localStorage.getItem('_wf2_cfg')) {
       this.appStore.isInitialState = false;
+      console.log(localStorage.getItem('_wf2_cfg'));
     } else {
       console.log('Local Storage is Empty');
     }
