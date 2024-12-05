@@ -14,8 +14,8 @@ export const useMeteoStore = defineStore('meteoStore', {
     currentTab: 0,
   }),
   actions: {
-    meteoDataHandler(data: IFetchedMeteoData) {
-      const rebuildData = meteoDataBuilder(data);
+    meteoDataHandler(data: IFetchedMeteoData, hoursList: number[]) {
+      const rebuildData = meteoDataBuilder(data, hoursList);
       this.meteoData = rebuildData;
       this.currentMeteoData = rebuildData.daily[0];
     },

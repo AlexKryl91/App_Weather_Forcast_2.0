@@ -18,32 +18,6 @@ export default {
     };
   },
   beforeMount() {
-    if (localStorage.getItem('_wf2_cfg')) {
-      this.appStore.isInitialState = false;
-      console.log(localStorage.getItem('_wf2_cfg'));
-    } else {
-      console.log('Local Storage is Empty');
-    }
-    if (sessionStorage.getItem('locationCache')) {
-      const cache = sessionStorage.getItem('locationCache') as string;
-      const location = JSON.parse(cache);
-      this.appStore.isInitialState = false;
-      this.geoStore.location = location;
-      meteoFetch(location as ILocation)
-        .then((data) => {
-          if (data) {
-            this.meteoStore.meteoDataHandler(data);
-          }
-        })
-        .catch(() => {
-          this.appStore.isError = true;
-          this.appStore.errorCode = 'meteofetch';
-        })
-        .finally(() => {
-          this.meteoStore.isFetching = false;
-        });
-    }
-
     const month = new Date().getMonth();
     switch (month) {
       case 0:
@@ -67,6 +41,32 @@ export default {
         this.season = 'autumn';
         break;
     }
+
+    if (localStorage.getItem('_wf2_cfg')) {
+      const cfgJSON = localStorage.getItem('_wf2_cfg') as string;
+      const cfg = JSON.parse(cfgJSON);
+      this.appStore.saveLocation = cfg.saveLocation;
+      this.appStore.hourList = cfg.hourList;
+
+      if (cfg.location) {
+        this.appStore.isInitialState = false;
+        this.geoStore.location = cfg.location;
+        this.meteoStore.isFetching = true;
+        meteoFetch(this.geoStore.location as ILocation)
+          .then((data) => {
+            if (data) {
+              this.meteoStore.meteoDataHandler(data, this.appStore.hourList);
+            }
+          })
+          .catch(() => {
+            this.appStore.isError = true;
+            this.appStore.errorCode = 'meteofetch';
+          })
+          .finally(() => {
+            this.meteoStore.isFetching = false;
+          });
+      }
+    }
   },
   mounted() {
     document.onreadystatechange = () => {
@@ -75,6 +75,16 @@ export default {
       }
     };
     document.querySelector('#app')?.classList.add(this.season);
+  },
+  unmounted() {
+    if (this.appStore.saveLocation) {
+      const cfg = {
+        saveLocation: this.appStore.saveLocation,
+        hourList: this.appStore.saveLocation,
+        location: this.geoStore.location,
+      };
+      localStorage.setItem('_wf2_cfg', JSON.stringify(cfg));
+    }
   },
 };
 </script>

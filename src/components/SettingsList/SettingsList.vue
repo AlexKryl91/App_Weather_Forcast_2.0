@@ -12,9 +12,8 @@ export default {
     return {
       geoStore: useGeoStore(),
       appStore: useAppStore(),
-      saveLocation: useAppStore().saveLocation,
-      isCustomHours: useAppStore().isCustomHours,
-      customHourList: useAppStore().hourList,
+      saveLocation: false,
+      customHourList: [] as number[],
     };
   },
   methods: {
@@ -36,65 +35,44 @@ export default {
       const isSameSaveLoc = this.appStore.saveLocation === this.saveLocation;
       const isSameHourList =
         this.appStore.hourList.toString() === this.customHourList.toString();
-      // const isSameCustomOpt =
-      //   this.appStore.isCustomHours === this.isCustomHours;
-      const check = this.isCustomHours ? isSameHourList : true;
-      const summary = isSameSaveLoc && check;
-
-      // console.log(
-      //   'same save_loc =>',
-      //   isSaveOptSame,
-      //   '| mode custom_opt',
-      //   isCustomOptOn,
-      //   '| same hour_list',
-      //   isHourListSame,
-      //   '|| summary =>',
-      //   summary,
-      //   summary ? 'DISABLED' : 'ACTIVE',
-      // );
+      const btnStatus = isSameSaveLoc && isSameHourList;
 
       const target = this.$refs.apply as TElRef;
-      target.$el.classList.toggle('disabled', summary);
+      target.$el.classList.toggle('disabled', btnStatus);
     },
     applySettings() {
       console.log('Apply settings!!!');
       this.appStore.saveLocation = this.saveLocation;
-      this.appStore.isCustomHours = this.isCustomHours;
       this.appStore.hourList = this.customHourList;
-      if (this.saveLocation && this.geoStore.location) {
-        localStorage.setItem(
-          '_wf2_loc',
-          JSON.stringify(this.geoStore.location),
-        );
-      } else {
-        localStorage.removeItem('_wf2_loc');
+
+      if (this.saveLocation) {
+        const configuration = {
+          saveLocation: this.saveLocation,
+          hourList: this.customHourList,
+          location: this.geoStore.location,
+        };
+        localStorage.setItem('_wf2_cfg', JSON.stringify(configuration));
       }
-      const conf = {
-        saveLocation: this.saveLocation,
-        isCustomHours: this.isCustomHours,
-        hourList: this.customHourList,
-      };
-      localStorage.setItem('_wf2_cfg', JSON.stringify(conf));
+
       this.checkDifference();
     },
     setDefault() {
       this.saveLocation = this.appStore.saveLocation = false;
-      this.isCustomHours = this.appStore.isCustomHours = false;
       this.customHourList = this.appStore.hourList = [6, 9, 12, 15, 18, 21];
       localStorage.removeItem('_wf2_cfg');
-      localStorage.removeItem('_wf2_loc');
     },
   },
   watch: {
     saveLocation() {
       this.checkDifference();
     },
-    isCustomHours() {
-      this.checkDifference();
-    },
     customHourList() {
       this.checkDifference();
     },
+  },
+  mounted() {
+    this.saveLocation = this.appStore.saveLocation;
+    this.customHourList = this.appStore.hourList;
   },
 };
 </script>
@@ -102,29 +80,22 @@ export default {
 <template>
   <div class="settings">
     <span class="settings__header">Настройки</span>
-    <div class="options-wrapper">
-      <ToggleSwitch v-model="saveLocation"
-        >Сохранять последнюю локацию</ToggleSwitch
-      >
-      <ToggleSwitch v-model="isCustomHours"
-        >Редактировать почасовое отображение</ToggleSwitch
-      >
-    </div>
-
-    <ul
-      @click="selectHours"
-      class="hours-list"
-      :class="{ collapsed: !isCustomHours }"
+    <ToggleSwitch v-model="saveLocation"
+      >Сохранять последнюю локацию*</ToggleSwitch
     >
-      <li
-        v-for="(n, index) in 24"
-        v-bind:key="n"
-        :value="index"
-        :class="{ selected: appStore.hourList.includes(index) }"
-      >
-        {{ index }}:00
-      </li>
-    </ul>
+    <div class="hours-edit">
+      <span class="hours-edit__label">Почасовое отображение:</span>
+      <ul @click="selectHours" class="hours-edit__list">
+        <li
+          v-for="(n, index) in 24"
+          v-bind:key="n"
+          :value="index"
+          :class="{ selected: customHourList.includes(index) }"
+        >
+          {{ index }}:00
+        </li>
+      </ul>
+    </div>
   </div>
   <div class="btn-wrapper">
     <ModalButton @click="applySettings" ref="apply" class="disabled"
@@ -133,7 +104,12 @@ export default {
     <ModalButton @click="setDefault">Сбросить</ModalButton>
     <ModalButton @click="closeSettings">Закрыть</ModalButton>
   </div>
-  <div class="credits">Инфо</div>
+  <div class="info">
+    *По умолчанию приложение запоминает последнюю локацию, пока вы не закрыли
+    приложение (покинули страницу). Данная же опция позволяет сохранить
+    последнюю выбранную локацию даже после закрытия брузера.
+  </div>
+  <div class="credits">CREDITS</div>
 </template>
 
 <style src="./SettingsList.scss"></style>

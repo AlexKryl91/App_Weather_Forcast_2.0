@@ -14,12 +14,11 @@ import {
   dataSlicer,
 } from './dataBuilderHelpers';
 
-function meteoDataBuilder({
-  utc_offset_seconds,
-  daily,
-  hourly,
-}: IFetchedMeteoData) {
-  const hoursIndexPreset = [6, 9, 12, 15, 18, 21];
+function meteoDataBuilder(
+  { utc_offset_seconds, daily, hourly }: IFetchedMeteoData,
+  hoursIndexPreset: number[],
+) {
+  // const hoursIndexPreset = [6, 9, 12, 15, 18, 21];
   const result = {} as IReMeteoData;
 
   result.utcOffset = utc_offset_seconds / 3600;

@@ -24,7 +24,7 @@ export default {
     },
     selectLocation(e: Event) {
       const node = e.target as HTMLUListElement;
-      console.log(node)
+      console.log(node);
       if (node.closest('li')) {
         const item = node.closest('li') as HTMLLIElement;
         if (this.selectedItem?.value !== item.value) {
@@ -42,11 +42,15 @@ export default {
         meteoFetch(this.geoStore.location as ILocation)
           .then((data) => {
             if (data) {
-              this.meteoStore.meteoDataHandler(data);
-              sessionStorage.setItem(
-                'locationCache',
-                JSON.stringify(this.geoStore.location),
-              );
+              this.meteoStore.meteoDataHandler(data, this.appStore.hourList);
+              if (this.appStore.saveLocation) {
+                const cfg = {
+                  saveLocation: this.appStore.saveLocation,
+                  hourList: this.appStore.hourList,
+                  location: this.geoStore.location,
+                };
+                localStorage.setItem('_wf2_cfg', JSON.stringify(cfg));
+              }
             }
           })
           .catch(() => {
