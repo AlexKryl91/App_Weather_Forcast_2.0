@@ -1,9 +1,9 @@
 <script lang="ts">
 import { useAppStore } from '@/stores/AppStore';
-import { useMeteoStore } from '@/stores/MeteoStore';
+// import { useMeteoStore } from '@/stores/MeteoStore';
 import type { ILocation } from '@/types/types';
 import meteoFetch from '@/API/meteoFetch';
-import { useGeoStore } from '@/stores/GeoStore';
+// import { useGeoStore } from '@/stores/GeoStore';
 
 type TSeason = 'winter' | 'spring' | 'summer' | 'autumn';
 
@@ -11,8 +11,8 @@ export default {
   data() {
     return {
       appStore: useAppStore(),
-      geoStore: useGeoStore(),
-      meteoStore: useMeteoStore(),
+      // geoStore: useGeoStore(),
+      // meteoStore: useMeteoStore(),
       isLoading: true,
       season: '' as TSeason,
     };
@@ -50,12 +50,12 @@ export default {
 
       if (cfg.location) {
         this.appStore.isInitialState = false;
-        this.geoStore.location = cfg.location;
-        this.meteoStore.isFetching = true;
-        meteoFetch(this.geoStore.location as ILocation)
+        this.appStore.location = cfg.location;
+        this.appStore.isMeteoFetching = true;
+        meteoFetch(this.appStore.location as ILocation)
           .then((data) => {
             if (data) {
-              this.meteoStore.meteoDataHandler(data, this.appStore.hourList);
+              this.appStore.meteoDataHandler(data, this.appStore.hourList);
             }
           })
           .catch(() => {
@@ -63,7 +63,7 @@ export default {
             this.appStore.errorCode = 'meteofetch';
           })
           .finally(() => {
-            this.meteoStore.isFetching = false;
+            this.appStore.isMeteoFetching = false;
           });
       }
     }
@@ -81,7 +81,7 @@ export default {
       const cfg = {
         saveLocation: this.appStore.saveLocation,
         hourList: this.appStore.saveLocation,
-        location: this.geoStore.location,
+        location: this.appStore.location,
       };
       localStorage.setItem('_wf2_cfg', JSON.stringify(cfg));
     }
@@ -127,7 +127,7 @@ export default {
       </ModalWindow>
     </Transition>
 
-    <FetchLoader v-if="meteoStore.isFetching" />
+    <FetchLoader v-if="appStore.isMeteoFetching" />
   </div>
 </template>
 

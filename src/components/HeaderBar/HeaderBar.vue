@@ -1,13 +1,13 @@
 <script lang="ts">
-import geoFetch from '@/API/geoFetch';
+// import geoFetch from '@/API/geoFetch';
 import { useAppStore } from '@/stores/AppStore';
-import { useGeoStore } from '@/stores/GeoStore';
+// import { useGeoStore } from '@/stores/GeoStore';
 
 export default {
   name: 'HeaderBar',
   data() {
     return {
-      geoStore: useGeoStore(),
+      // geoStore: useGeoStore(),
       appStore: useAppStore(),
       locationInput: '',
       debounceId: -1,
@@ -17,7 +17,7 @@ export default {
     openSearch() {
       if (this.appStore.isSearchOpened) {
         this.appStore.isSearchOpened = false;
-        this.geoStore.fetchedList = [];
+        this.appStore.fetchedList = [];
       } else {
         this.locationInput = '';
         this.appStore.isSearchOpened = true;
@@ -33,8 +33,8 @@ export default {
         this.locationInput = '';
         this.appStore.isSearchOpened = false;
         this.appStore.isSettingsOpened = true;
-        this.geoStore.fetchedList = [];
-        this.geoStore.isResponseEmpty = false;
+        this.appStore.fetchedList = [];
+        this.appStore.isResponseEmpty = false;
       }
     },
   },
@@ -43,27 +43,29 @@ export default {
       clearTimeout(this.debounceId);
       this.debounceId = setTimeout(() => {
         this.locationInput = value;
-        this.geoStore.fetchedList = [];
 
-        if (value) {
-          this.geoStore.isFetching = true;
-          geoFetch(value)
-            .then((data) => {
-              if (data) {
-                this.geoStore.setFetchedList(data);
-                this.appStore.isError = false;
-                this.appStore.errorCode = 'none';
-              } else {
-                this.geoStore.setEmptyResponse();
-              }
-            })
-            .catch(() => {
-              this.appStore.isSearchOpened = false;
-              this.appStore.isError = true;
-              this.appStore.errorCode = 'geofetch';
-            })
-            .finally(() => (this.geoStore.isFetching = false));
-        }
+        this.appStore.geoFetchHandler(value);
+        // this.appStore.fetchedList = [];
+
+        // if (value) {
+        //   this.appStore.isGeoFetching = true;
+        //   geoFetch(value)
+        //     .then((data) => {
+        //       if (data) {
+        //         this.appStore.setFetchedList(data);
+        //         this.appStore.isError = false;
+        //         this.appStore.errorCode = 'none';
+        //       } else {
+        //         this.appStore.setEmptyResponse();
+        //       }
+        //     })
+        //     .catch(() => {
+        //       this.appStore.isSearchOpened = false;
+        //       this.appStore.isError = true;
+        //       this.appStore.errorCode = 'geofetch';
+        //     })
+        //     .finally(() => (this.appStore.isGeoFetching = false));
+        // }
       }, 500);
     },
   },

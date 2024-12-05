@@ -1,7 +1,7 @@
 <script lang="ts">
 import { useAppStore } from '@/stores/AppStore';
-import { useGeoStore } from '@/stores/GeoStore';
-import { useMeteoStore } from '@/stores/MeteoStore';
+// import { useGeoStore } from '@/stores/GeoStore';
+// import { useMeteoStore } from '@/stores/MeteoStore';
 import paramsData from '@/utils/paramsTable';
 import meteoFetch from '@/API/meteoFetch';
 import type { ILocation } from '@/types/types';
@@ -11,8 +11,8 @@ export default {
   data() {
     return {
       appStore: useAppStore(),
-      meteoStore: useMeteoStore(),
-      geoStore: useGeoStore(),
+      // meteoStore: useMeteoStore(),
+      // geoStore: useGeoStore(),
       paramsData,
       currentTime: '',
       timeId: -1,
@@ -36,7 +36,7 @@ export default {
   mounted() {
     this.timeId = setInterval(() => {
       const date = new Date();
-      date.setHours(date.getUTCHours() + this.meteoStore.meteoData.utcOffset);
+      date.setHours(date.getUTCHours() + this.appStore.meteoData.utcOffset);
       this.currentTime = date.toLocaleTimeString('ru-RU', {
         hour: '2-digit',
         minute: '2-digit',
@@ -48,11 +48,11 @@ export default {
         date.getMinutes() === 0 &&
         date.getSeconds() === 0
       ) {
-        this.meteoStore.isFetching = true;
-        meteoFetch(this.geoStore.location as ILocation)
+        this.appStore.isMeteoFetching = true;
+        meteoFetch(this.appStore.location as ILocation)
           .then((data) => {
             if (data) {
-              this.meteoStore.meteoDataHandler(data, this.appStore.hourList);
+              this.appStore.meteoDataHandler(data, this.appStore.hourList);
             }
           })
           .catch(() => {
@@ -60,7 +60,7 @@ export default {
             this.appStore.errorCode = 'meteofetch';
           })
           .finally(() => {
-            this.meteoStore.isFetching = false;
+            this.appStore.isMeteoFetching = false;
           });
       }
     }, 1000);
@@ -76,7 +76,7 @@ export default {
     <div class="head-item">
       <div class="date-wrapper">
         <div class="dow">
-          {{ meteoStore.currentMeteoData.dow }}
+          {{ appStore.currentMeteoData.dow }}
         </div>
         <div class="date">
           <img
@@ -86,21 +86,21 @@ export default {
             width="21"
             height="24"
           />
-          <span>{{ meteoStore.currentMeteoData.date }}</span>
+          <span>{{ appStore.currentMeteoData.date }}</span>
         </div>
         <div class="place">
           <img
             class="flag-icon"
-            :src="`/src/assets/icons/flag_icons/fi_${geoStore.location?.countryCode}.svg`"
+            :src="`/src/assets/icons/flag_icons/fi_${appStore.location?.countryCode}.svg`"
             alt="Иконка флага"
             width="21"
             height="24"
           />
           <span>
-            {{ geoStore.location?.name }}
+            {{ appStore.location?.name }}
           </span>
         </div>
-        <div v-if="meteoStore.currentTab === 0" class="time">
+        <div v-if="appStore.currentTab === 0" class="time">
           <img
             src="@/assets/icons/clock.svg"
             alt="Иконка календаря"
@@ -130,7 +130,7 @@ export default {
     <div @wheel="horizontalScroll" ref="wrapper" class="w-wrapper">
       <div
         class="w-item"
-        v-for="data in meteoStore.currentMeteoData.hourly"
+        v-for="data in appStore.currentMeteoData.hourly"
         v-bind:key="data.hour"
       >
         <div class="w-item__top">

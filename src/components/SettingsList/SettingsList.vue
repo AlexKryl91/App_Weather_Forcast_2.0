@@ -1,7 +1,7 @@
 <script lang="ts">
 import { useAppStore } from '@/stores/AppStore';
-import { useGeoStore } from '@/stores/GeoStore';
-import { useMeteoStore } from '@/stores/MeteoStore';
+// import { useGeoStore } from '@/stores/GeoStore';
+// import { useMeteoStore } from '@/stores/MeteoStore';
 import type { ILocation } from '@/types/types';
 import meteoFetch from '@/API/meteoFetch';
 
@@ -13,8 +13,8 @@ export default {
   name: 'SettingsList',
   data() {
     return {
-      geoStore: useGeoStore(),
-      meteoStore: useMeteoStore(),
+      // geoStore: useGeoStore(),
+      // meteoStore: useMeteoStore(),
       appStore: useAppStore(),
       saveLocation: false,
       customHourList: [] as number[],
@@ -53,17 +53,19 @@ export default {
         const configuration = {
           saveLocation: this.saveLocation,
           hourList: this.customHourList,
-          location: this.geoStore.location,
+          location: this.appStore.location,
         };
         localStorage.setItem('_wf2_cfg', JSON.stringify(configuration));
+      } else {
+        localStorage.removeItem('_wf2_cfg');
       }
 
-      if (this.geoStore.location) {
-        this.meteoStore.isFetching = true;
-        meteoFetch(this.geoStore.location as ILocation)
+      if (this.appStore.location) {
+        this.appStore.isMeteoFetching = true;
+        meteoFetch(this.appStore.location as ILocation)
           .then((data) => {
             if (data) {
-              this.meteoStore.meteoDataHandler(data, this.appStore.hourList);
+              this.appStore.meteoDataHandler(data, this.appStore.hourList);
             }
           })
           .catch(() => {
@@ -71,7 +73,7 @@ export default {
             this.appStore.errorCode = 'meteofetch';
           })
           .finally(() => {
-            this.meteoStore.isFetching = false;
+            this.appStore.isMeteoFetching = false;
           });
       }
 

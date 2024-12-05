@@ -1,11 +1,11 @@
 <script lang="ts">
 import { useAppStore } from '@/stores/AppStore';
-import { useMeteoStore } from '@/stores/MeteoStore';
+// import { useMeteoStore } from '@/stores/MeteoStore';
 
 export default {
   data() {
     return {
-      meteoStore: useMeteoStore(),
+      // meteoStore: useMeteoStore(),
       appStore: useAppStore(),
       currentDay: 0,
     };
@@ -17,8 +17,8 @@ export default {
         const item = node.closest('li') as HTMLLIElement;
         if (this.currentDay !== item.value) {
           this.currentDay = item.value;
-          this.meteoStore.currentTab = item.value;
-          this.meteoStore.setCurrentMData(item.value);
+          this.appStore.currentTab = item.value;
+          this.appStore.setCurrentMData(item.value);
         }
       }
     },
@@ -30,7 +30,7 @@ export default {
 <template>
   <ul @click="selectDay" class="tabs">
     <li
-      v-for="(tab, index) in meteoStore.meteoData.daily"
+      v-for="(tab, index) in appStore.meteoData.daily"
       v-bind:key="tab.date"
       class="tabs__day"
       :class="{ active: currentDay === index }"
