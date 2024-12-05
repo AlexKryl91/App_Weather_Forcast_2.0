@@ -1,33 +1,20 @@
 .weather-table {
+  $scroll-h: 6px;
+  $first-w: 246px;
+  $first-mr: 22px;
+  $common-pb: 10px;
+
   height: 100%;
   margin-block: 20px 10px;
-  padding-bottom: 10px;
+  padding-bottom: $common-pb;
   display: flex;
-  justify-content: space-between;
-  //
-  overflow-x: auto;
-
-  &::-webkit-scrollbar {
-    $scroll-size: 6px;
-
-    height: $scroll-size;
-
-    &-track {
-      background: #0000;
-      border-radius: $scroll-size;
-    }
-
-    &-thumb {
-      background: var(--color-tab-bg);
-      border-radius: $scroll-size;
-      cursor: grabbing;
-    }
-  }
 
   .head-item {
+    padding-bottom: $scroll-h;
+
     height: 100%;
-    min-width: 246px;
-    margin-right: 20px;
+    min-width: $first-w;
+    margin-right: $first-mr;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -82,77 +69,100 @@
     }
   }
 
-  .w-item {
-    width: 140px;
-    min-width: 140px;
-    height: 100%;
-    color: var(--color-grey-dark);
-    padding: 6px 10px 0;
-    border-radius: 20px;
-    background-image: linear-gradient(
-      180deg,
-      #0000 0%,
-      var(--color-tab-bg) 25%,
-      var(--color-tab-bg) 50%,
-      #0000 100%
-    );
-
+  .w-wrapper {
+    width: calc(100% - $first-w - $first-mr);
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    margin-bottom: -$common-pb;
+    padding-bottom: $common-pb;
+    overflow-x: auto;
 
-    margin-right: 18px;
+    &::-webkit-scrollbar {
+      height: $scroll-h;
 
-    &:last-of-type {
-      margin-right: 0;
-    }
-
-    &-top {
-      width: 100%;
-
-      &__hour {
-        font-size: 20px;
-        text-align: center;
-        font-weight: 500;
-        color: var(--color-grey-light);
+      &-track {
+        background: #0000;
+        border-radius: $scroll-h;
       }
 
-      &__icon {
-        display: block;
-        margin: 20px auto 10px;
-        width: 100px;
-        height: 100px;
-      }
-
-      &__temp {
-        font-size: 32px;
-        text-align: center;
-        font-weight: 700;
-        color: var(--color-grey-medium);
-        margin-bottom: 20px;
-      }
-
-      &__desc {
-        text-align: center;
-        line-height: 1.2;
+      &-thumb {
+        background: var(--color-tab-bg);
+        border-radius: $scroll-h;
       }
     }
 
-    &__list {
-      list-style: none;
-      font-size: 18px;
-      text-align: center;
-      li {
-        padding: 3px 16px;
+    .w-item {
+      width: 140px;
+      min-width: 140px;
+      height: 100%;
+      color: var(--color-grey-dark);
+      padding: 6px 10px 0;
+      border-radius: 20px;
+      background-image: linear-gradient(
+        180deg,
+        #0000 0%,
+        var(--color-tab-bg) 25%,
+        var(--color-tab-bg) 50%,
+        #0000 100%
+      );
+
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      margin-right: 18px;
+
+      &:last-of-type {
+        margin-right: 0;
+      }
+
+      &-top {
+        width: 100%;
+
+        &__hour {
+          font-size: 20px;
+          text-align: center;
+          font-weight: 500;
+          color: var(--color-grey-light);
+        }
+
+        &__icon {
+          display: block;
+          margin: 20px auto 10px;
+          width: 100px;
+          height: 100px;
+        }
+
+        &__temp {
+          font-size: 32px;
+          text-align: center;
+          font-weight: 700;
+          color: var(--color-grey-medium);
+          margin-bottom: 20px;
+        }
+
+        &__desc {
+          text-align: center;
+          line-height: 1.2;
+        }
+      }
+
+      &__list {
+        list-style: none;
+        font-size: 18px;
+        text-align: center;
+        li {
+          padding: 3px 16px;
+        }
       }
     }
   }
 }
 
 @media (hover: hover) {
-  .weather-table {
+  .w-wrapper {
     &::-webkit-scrollbar-thumb:hover {
       background: #fff;
+      cursor: pointer;
     }
   }
 }

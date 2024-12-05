@@ -29,7 +29,7 @@ export default {
     },
     horizontalScroll(e: WheelEvent) {
       e.preventDefault();
-      const wTable = document.querySelector('.weather-table') as HTMLElement;
+      const wTable = document.querySelector('.w-wrapper') as HTMLElement;
       wTable.scrollLeft += e.deltaY;
     },
   },
@@ -52,7 +52,7 @@ export default {
         meteoFetch(this.geoStore.location as ILocation)
           .then((data) => {
             if (data) {
-              this.meteoStore.meteoDataHandler(data);
+              this.meteoStore.meteoDataHandler(data, this.appStore.hourList);
             }
           })
           .catch(() => {
@@ -72,7 +72,7 @@ export default {
 </script>
 
 <template>
-  <main @wheel="horizontalScroll" class="weather-table">
+  <main class="weather-table">
     <div class="head-item">
       <div class="date-wrapper">
         <div class="dow">
@@ -127,40 +127,42 @@ export default {
         </tbody>
       </table>
     </div>
-    <div
-      class="w-item"
-      v-for="data in meteoStore.currentMeteoData.hourly"
-      v-bind:key="data.hour"
-    >
-      <div class="w-item__top">
-        <div class="w-item-top__hour">
-          {{ data.hour }}
+    <div @wheel="horizontalScroll" ref="wrapper" class="w-wrapper">
+      <div
+        class="w-item"
+        v-for="data in meteoStore.currentMeteoData.hourly"
+        v-bind:key="data.hour"
+      >
+        <div class="w-item__top">
+          <div class="w-item-top__hour">
+            {{ data.hour }}
+          </div>
+          <img
+            class="w-item-top__icon"
+            :src="getWIconUrl(data.sunTag, data.weatherCode)"
+            :alt="data.weatherDescription"
+            width="100"
+            height="100"
+          />
+          <div class="w-item-top__temp">
+            {{ data.temperature }}
+          </div>
+          <div class="w-item-top__desc">{{ data.weatherDescription }}</div>
         </div>
-        <img
-          class="w-item-top__icon"
-          :src="getWIconUrl(data.sunTag, data.weatherCode)"
-          :alt="data.weatherDescription"
-          width="100"
-          height="100"
-        />
-        <div class="w-item-top__temp">
-          {{ data.temperature }}
-        </div>
-        <div class="w-item-top__desc">{{ data.weatherDescription }}</div>
+        <ul class="w-item__list">
+          <li>
+            {{ data.apparentTemperature }}
+          </li>
+          <li>{{ data.pressure }}</li>
+          <li>{{ data.windSpeed }}</li>
+          <li>{{ data.windGusts }}</li>
+          <li>{{ data.windDirection }}</li>
+          <li>{{ data.humidity }}</li>
+          <li>{{ data.precipitation }}</li>
+          <li>{{ data.cloudCover }}</li>
+          <li>{{ data.visibility }}</li>
+        </ul>
       </div>
-      <ul class="w-item__list">
-        <li>
-          {{ data.apparentTemperature }}
-        </li>
-        <li>{{ data.pressure }}</li>
-        <li>{{ data.windSpeed }}</li>
-        <li>{{ data.windGusts }}</li>
-        <li>{{ data.windDirection }}</li>
-        <li>{{ data.humidity }}</li>
-        <li>{{ data.precipitation }}</li>
-        <li>{{ data.cloudCover }}</li>
-        <li>{{ data.visibility }}</li>
-      </ul>
     </div>
   </main>
 </template>

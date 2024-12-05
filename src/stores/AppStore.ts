@@ -10,4 +10,7 @@ export const useAppStore = defineStore('appStore', {
     saveLocation: false,
     hourList: [6, 9, 12, 15, 18, 21] as number[],
   }),
+  // actions: {
+
+  // }
 });
