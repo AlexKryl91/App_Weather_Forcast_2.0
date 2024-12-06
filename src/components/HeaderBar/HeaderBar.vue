@@ -1,40 +1,35 @@
 <script lang="ts">
-// import geoFetch from '@/API/geoFetch';
 import { useAppStore } from '@/stores/AppStore';
-// import { useGeoStore } from '@/stores/GeoStore';
 
 export default {
   name: 'HeaderBar',
   data() {
     return {
-      // geoStore: useGeoStore(),
-      appStore: useAppStore(),
+      store: useAppStore(),
       locationInput: '',
       debounceId: -1,
     };
   },
   methods: {
-    openSearch() {
-      if (this.appStore.isSearchOpened) {
-        this.appStore.isSearchOpened = false;
-        this.appStore.fetchedList = [];
+    toggleSearch() {
+      if (this.store.isSearchOpened) {
+        this.store.isSearchOpened = false;
       } else {
         this.locationInput = '';
-        this.appStore.isSearchOpened = true;
-        this.appStore.isSettingsOpened = false;
+        this.store.fetchedList = [];
+        this.store.isSearchOpened = true;
+        this.store.isSettingsOpened = false;
+        this.store.isResponseEmpty = false;
         const el = this.$refs.search as HTMLInputElement;
         el.focus();
       }
     },
-    openSettings() {
-      if (this.appStore.isSettingsOpened) {
-        this.appStore.isSettingsOpened = false;
+    toggleSettings() {
+      if (this.store.isSettingsOpened) {
+        this.store.isSettingsOpened = false;
       } else {
-        this.locationInput = '';
-        this.appStore.isSearchOpened = false;
-        this.appStore.isSettingsOpened = true;
-        this.appStore.fetchedList = [];
-        this.appStore.isResponseEmpty = false;
+        this.store.isSearchOpened = false;
+        this.store.isSettingsOpened = true;
       }
     },
   },
@@ -43,37 +38,15 @@ export default {
       clearTimeout(this.debounceId);
       this.debounceId = setTimeout(() => {
         this.locationInput = value;
-
-        this.appStore.geoFetchHandler(value);
-        // this.appStore.fetchedList = [];
-
-        // if (value) {
-        //   this.appStore.isGeoFetching = true;
-        //   geoFetch(value)
-        //     .then((data) => {
-        //       if (data) {
-        //         this.appStore.setFetchedList(data);
-        //         this.appStore.isError = false;
-        //         this.appStore.errorCode = 'none';
-        //       } else {
-        //         this.appStore.setEmptyResponse();
-        //       }
-        //     })
-        //     .catch(() => {
-        //       this.appStore.isSearchOpened = false;
-        //       this.appStore.isError = true;
-        //       this.appStore.errorCode = 'geofetch';
-        //     })
-        //     .finally(() => (this.appStore.isGeoFetching = false));
-        // }
+        this.store.geoFetchHandler(value);
       }, 500);
     },
   },
   computed: {
     locationBtnClass() {
       return {
-        'loc-active': this.appStore.isSearchOpened,
-        init: this.appStore.isInitialState && !this.appStore.isSearchOpened,
+        'loc-active': this.store.isSearchOpened,
+        init: !this.store.location && !this.store.isSearchOpened,
       };
     },
   },
@@ -91,14 +64,14 @@ export default {
         ref="search"
         v-model.trim="locationInput"
         class="search-bar"
-        :class="{ 'search-bar_active': appStore.isSearchOpened }"
+        :class="{ 'search-bar_active': store.isSearchOpened }"
         type="text"
         placeholder="Укажите локацию ..."
         title="Введите название локации для поиска"
         required
       />
       <button
-        @click="openSearch"
+        @click="toggleSearch"
         class="location-btn"
         :class="locationBtnClass"
         type="button"
@@ -126,9 +99,9 @@ export default {
         </svg>
       </button>
       <button
-        @click="openSettings"
+        @click="toggleSettings"
         class="settings-btn"
-        :class="{ 'set-active': appStore.isSettingsOpened }"
+        :class="{ 'set-active': store.isSettingsOpened }"
         type="button"
       >
         <svg

@@ -7,16 +7,18 @@ import type {
   IReDailyMeteoData,
 } from '@/types/types';
 import geoFetch from '@/API/geoFetch';
+import meteoFetch from '@/API/meteoFetch';
 import meteoDataBuilder from '@/utils/meteoDataBuilder';
+
+type TErrorCode = 'geofetch' | 'meteofetch' | 'none';
 
 export const useAppStore = defineStore('appStore', {
   state: () => ({
     // States
     isSearchOpened: false,
     isSettingsOpened: false,
-    isInitialState: true,
     isError: false,
-    errorCode: 'none' as 'geofetch' | 'meteofetch' | 'none',
+    errorCode: 'none' as TErrorCode,
     // Settings
     saveLocation: false,
     hourList: [6, 9, 12, 15, 18, 21] as number[],
@@ -32,37 +34,45 @@ export const useAppStore = defineStore('appStore', {
     currentTab: 0,
   }),
   actions: {
+    // App Actions
+    writeToLocalStorage() {
+      const cfg = {
+        saveLocation: this.saveLocation,
+        hourList: this.hourList,
+        location: this.location,
+      };
+      localStorage.setItem('_wf2_cfg', JSON.stringify(cfg));
+    },
+
     // Geo Actions
     geoFetchHandler(value: string) {
-      this.fetchedList = [];
       if (value) {
         this.isGeoFetching = true;
         geoFetch(value)
           .then((data) => {
-            if (data) {
-              const filtered = data.filter((item) => item.country);
-              filtered.sort((item1, item2) =>
-                item1.country.localeCompare(item2.country),
-              );
-              this.fetchedList = filtered;
-              this.isResponseEmpty = false;
-              this.isError = false;
-              this.errorCode = 'none';
-            } else {
-              this.fetchedList = [];
-              this.isResponseEmpty = true;
-            }
+            this.fetchedList = data
+              ? (this.fetchedList = data
+                  .filter((item) => item.country)
+                  .sort((item1, item2) =>
+                    item1.country.localeCompare(item2.country),
+                  ))
+              : [];
+            this.isResponseEmpty = !data;
+            this.isError = false;
+            this.errorCode = 'none';
           })
           .catch(() => {
             this.isSearchOpened = false;
             this.isError = true;
             this.errorCode = 'geofetch';
           })
-          .finally(() => (this.isGeoFetching = false));
+          .finally(() => {
+            this.isGeoFetching = false;
+          });
       }
     },
     setLocation(index: number) {
-      const data = { ...this.fetchedList[index] };
+      const data = this.fetchedList[index];
       this.location = {
         name: data.name,
         fullName: `${data.country}, ${data.admin1 ?? 'n/a'}, ${data.name}`,
@@ -73,13 +83,71 @@ export const useAppStore = defineStore('appStore', {
     },
 
     // Meteo Actions
-    meteoDataHandler(data: IFetchedMeteoData, hoursList: number[]) {
+    setCurrentMData(day: number) {
+      this.currentMeteoData = this.meteoData.daily[day];
+    },
+    meteoDataTransformer(data: IFetchedMeteoData, hoursList: number[]) {
       const rebuildData = meteoDataBuilder(data, hoursList);
       this.meteoData = rebuildData;
       this.currentMeteoData = rebuildData.daily[0];
     },
-    setCurrentMData(day: number) {
-      this.currentMeteoData = this.meteoData.daily[day];
+    meteoFetchHandler(value: number) {
+      this.setLocation(value);
+      this.isMeteoFetching = true;
+      meteoFetch(this.location as ILocation)
+        .then((data) => {
+          if (data) {
+            this.meteoDataTransformer(data, this.hourList);
+            if (this.saveLocation) {
+              this.writeToLocalStorage();
+            }
+          }
+        })
+        .catch(() => {
+          this.isError = true;
+          this.errorCode = 'meteofetch';
+        })
+        .finally(() => {
+          this.isSearchOpened = false;
+          this.isMeteoFetching = false;
+        });
+    },
+    meteoUpdateHandler() {
+      if (this.location) {
+        this.currentTab = 0;
+        this.isMeteoFetching = true;
+        meteoFetch(this.location as ILocation)
+          .then((data) => {
+            if (data) {
+              this.meteoDataTransformer(data, this.hourList);
+            }
+          })
+          .catch(() => {
+            this.isError = true;
+            this.errorCode = 'meteofetch';
+          })
+          .finally(() => {
+            this.isMeteoFetching = false;
+          });
+      }
+    },
+    midnightHandler() {
+      const date = new Date();
+      date.setHours(date.getUTCHours() + this.meteoData.utcOffset);
+      const time = date.toLocaleTimeString('ru-RU', {
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+
+      if (
+        date.getHours() === 0 &&
+        date.getMinutes() === 0 &&
+        date.getSeconds() === 0
+      ) {
+        this.meteoUpdateHandler();
+      }
+
+      return time;
     },
   },
 });

@@ -1,21 +1,18 @@
 <script lang="ts">
-import meteoFetch from '@/API/meteoFetch';
 import { useAppStore } from '@/stores/AppStore';
-// import { useGeoStore } from '@/stores/GeoStore';
-// import { useMeteoStore } from '@/stores/MeteoStore';
-import type { ILocation } from '@/types/types';
 
 export default {
   name: 'SelectForm',
   data() {
     return {
-      appStore: useAppStore(),
-      // geoStore: useGeoStore(),
-      // meteoStore: useMeteoStore(),
+      store: useAppStore(),
       selectedItem: null as HTMLLIElement | null,
     };
   },
   methods: {
+    closeSearch() {
+      this.store.isSearchOpened = false;
+    },
     getImgURL(code: string) {
       return new URL(
         `/src/assets/icons/flag_icons/fi_${code}.svg`,
@@ -34,40 +31,9 @@ export default {
       }
     },
     applyLocation() {
-      if (this.selectedItem && !this.appStore.isResponseEmpty) {
-        this.appStore.setLocation(this.selectedItem.value);
-        this.appStore.isInitialState = false;
-        this.appStore.isMeteoFetching = true;
-        meteoFetch(this.appStore.location as ILocation)
-          .then((data) => {
-            if (data) {
-              this.appStore.meteoDataHandler(data, this.appStore.hourList);
-              if (this.appStore.saveLocation) {
-                const cfg = {
-                  saveLocation: this.appStore.saveLocation,
-                  hourList: this.appStore.hourList,
-                  location: this.appStore.location,
-                };
-                localStorage.setItem('_wf2_cfg', JSON.stringify(cfg));
-              }
-            }
-          })
-          .catch(() => {
-            this.appStore.isSearchOpened = false;
-            this.appStore.isError = true;
-            this.appStore.errorCode = 'meteofetch';
-          })
-          .finally(() => {
-            this.appStore.isSearchOpened = false;
-            this.appStore.isMeteoFetching = false;
-          });
-      } else {
-        alert('Нужно выбрать локацию');
+      if (this.selectedItem && !this.store.isResponseEmpty) {
+        this.store.meteoFetchHandler(this.selectedItem.value);
       }
-    },
-    closeSearch() {
-      this.appStore.isSearchOpened = false;
-      this.appStore.fetchedList = [];
     },
   },
 };
@@ -77,16 +43,17 @@ export default {
   <div class="select">
     <div class="indication-wrapper">
       <div
-        v-if="appStore.isResponseEmpty && !appStore.isGeoFetching"
+        v-if="store.isResponseEmpty && !store.isGeoFetching"
         class="empty-msg"
       >
         Нет совпадений
       </div>
-      <div v-if="appStore.isGeoFetching" class="loader"></div>
+
+      <div v-if="store.isGeoFetching" class="loader"></div>
     </div>
     <ul @click="selectLocation" class="select__list">
       <li
-        v-for="(location, index) in appStore.fetchedList"
+        v-for="(location, index) in store.fetchedList"
         v-bind:key="location.id"
         :style="{
           'background-image': `url(${getImgURL(location.country_code)})`,
@@ -99,7 +66,9 @@ export default {
     </ul>
   </div>
   <div class="btn-wrapper">
-    <ModalButton @click="applyLocation">Применить</ModalButton>
+    <ModalButton @click="applyLocation" :class="{ disabled: !selectedItem }"
+      >Применить</ModalButton
+    >
     <ModalButton @click="closeSearch">Закрыть</ModalButton>
   </div>
 </template>

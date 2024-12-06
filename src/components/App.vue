@@ -1,18 +1,12 @@
 <script lang="ts">
 import { useAppStore } from '@/stores/AppStore';
-// import { useMeteoStore } from '@/stores/MeteoStore';
-import type { ILocation } from '@/types/types';
-import meteoFetch from '@/API/meteoFetch';
-// import { useGeoStore } from '@/stores/GeoStore';
 
 type TSeason = 'winter' | 'spring' | 'summer' | 'autumn';
 
 export default {
   data() {
     return {
-      appStore: useAppStore(),
-      // geoStore: useGeoStore(),
-      // meteoStore: useMeteoStore(),
+      store: useAppStore(),
       isLoading: true,
       season: '' as TSeason,
     };
@@ -45,27 +39,10 @@ export default {
     if (localStorage.getItem('_wf2_cfg')) {
       const cfgJSON = localStorage.getItem('_wf2_cfg') as string;
       const cfg = JSON.parse(cfgJSON);
-      this.appStore.saveLocation = cfg.saveLocation;
-      this.appStore.hourList = cfg.hourList;
-
-      if (cfg.location) {
-        this.appStore.isInitialState = false;
-        this.appStore.location = cfg.location;
-        this.appStore.isMeteoFetching = true;
-        meteoFetch(this.appStore.location as ILocation)
-          .then((data) => {
-            if (data) {
-              this.appStore.meteoDataHandler(data, this.appStore.hourList);
-            }
-          })
-          .catch(() => {
-            this.appStore.isError = true;
-            this.appStore.errorCode = 'meteofetch';
-          })
-          .finally(() => {
-            this.appStore.isMeteoFetching = false;
-          });
-      }
+      this.store.saveLocation = cfg.saveLocation;
+      this.store.hourList = cfg.hourList;
+      this.store.location = cfg.location;
+      this.store.meteoUpdateHandler();
     }
   },
   mounted() {
@@ -76,16 +53,6 @@ export default {
     };
     document.querySelector('#app')?.classList.add(this.season);
   },
-  unmounted() {
-    if (this.appStore.saveLocation) {
-      const cfg = {
-        saveLocation: this.appStore.saveLocation,
-        hourList: this.appStore.saveLocation,
-        location: this.appStore.location,
-      };
-      localStorage.setItem('_wf2_cfg', JSON.stringify(cfg));
-    }
-  },
 };
 </script>
 
@@ -95,39 +62,37 @@ export default {
   </Transition>
   <div v-show="!isLoading" class="container">
     <HeaderBar />
-    <div v-if="appStore.isInitialState && !appStore.isError" class="msg">
+    <div v-if="!store.location && !store.isError" class="msg">
       <span class="init"
         >Укажите локацию, в которой хотели бы узнать погоду</span
       >
     </div>
-    <div v-if="appStore.isError" class="msg err">
+    <div v-if="store.isError" class="msg err">
       <span class="err__header"
         >Ошибка запроса
-        {{
-          appStore.errorCode === 'geofetch' ? 'геоданных' : 'метеоданных'
-        }}</span
+        {{ store.errorCode === 'geofetch' ? 'геоданных' : 'метеоданных' }}</span
       >
       <span class="err__desc"
         >Ой! Кажется что-то пошло не так... Поробуйте повторить запрос
         позднее</span
       >
     </div>
-    <MainTable v-if="!appStore.isInitialState && !appStore.isError" />
-    <TabsBar v-if="!appStore.isInitialState && !appStore.isError" />
+    <MainTable v-if="store.location && !store.isError" />
+    <TabsBar v-if="store.location && !store.isError" />
 
     <Transition name="slide">
-      <ModalWindow v-if="appStore.isSearchOpened">
+      <ModalWindow v-if="store.isSearchOpened">
         <SelectForm />
       </ModalWindow>
     </Transition>
 
     <Transition name="slide">
-      <ModalWindow v-if="appStore.isSettingsOpened">
+      <ModalWindow v-if="store.isSettingsOpened">
         <SettingsList />
       </ModalWindow>
     </Transition>
 
-    <FetchLoader v-if="appStore.isMeteoFetching" />
+    <FetchLoader v-if="store.isMeteoFetching" />
   </div>
 </template>
 

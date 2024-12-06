@@ -1,9 +1,5 @@
 <script lang="ts">
 import { useAppStore } from '@/stores/AppStore';
-// import { useGeoStore } from '@/stores/GeoStore';
-// import { useMeteoStore } from '@/stores/MeteoStore';
-import type { ILocation } from '@/types/types';
-import meteoFetch from '@/API/meteoFetch';
 
 type TElRef = {
   $el: HTMLElement;
@@ -13,16 +9,14 @@ export default {
   name: 'SettingsList',
   data() {
     return {
-      // geoStore: useGeoStore(),
-      // meteoStore: useMeteoStore(),
-      appStore: useAppStore(),
+      store: useAppStore(),
       saveLocation: false,
       customHourList: [] as number[],
     };
   },
   methods: {
     closeSettings() {
-      this.appStore.isSettingsOpened = false;
+      this.store.isSettingsOpened = false;
     },
     selectHours(e: Event) {
       const node = e.target as HTMLElement;
@@ -36,52 +30,28 @@ export default {
       }
     },
     checkDifference() {
-      const isSameSaveLoc = this.appStore.saveLocation === this.saveLocation;
-      const isSameHourList =
-        this.appStore.hourList.toString() === this.customHourList.toString();
-      const btnStatus = isSameSaveLoc && isSameHourList;
-
+      const btnState =
+        this.store.saveLocation === this.saveLocation &&
+        this.store.hourList.toString() === this.customHourList.toString();
       const target = this.$refs.apply as TElRef;
-      target.$el.classList.toggle('disabled', btnStatus);
+      target.$el.classList.toggle('disabled', btnState);
     },
     applySettings() {
-      console.log('Apply settings!!!');
-      this.appStore.saveLocation = this.saveLocation;
-      this.appStore.hourList = this.customHourList;
+      this.store.saveLocation = this.saveLocation;
+      this.store.hourList = this.customHourList;
 
       if (this.saveLocation) {
-        const configuration = {
-          saveLocation: this.saveLocation,
-          hourList: this.customHourList,
-          location: this.appStore.location,
-        };
-        localStorage.setItem('_wf2_cfg', JSON.stringify(configuration));
+        this.store.writeToLocalStorage();
       } else {
         localStorage.removeItem('_wf2_cfg');
       }
 
-      if (this.appStore.location) {
-        this.appStore.isMeteoFetching = true;
-        meteoFetch(this.appStore.location as ILocation)
-          .then((data) => {
-            if (data) {
-              this.appStore.meteoDataHandler(data, this.appStore.hourList);
-            }
-          })
-          .catch(() => {
-            this.appStore.isError = true;
-            this.appStore.errorCode = 'meteofetch';
-          })
-          .finally(() => {
-            this.appStore.isMeteoFetching = false;
-          });
-      }
-
+      this.store.meteoUpdateHandler();
       this.checkDifference();
     },
     setDefault() {
-      this.saveLocation = this.appStore.saveLocation = false;
-      this.customHourList = this.appStore.hourList = [6, 9, 12, 15, 18, 21];
+      this.saveLocation = this.store.saveLocation = false;
+      this.customHourList = this.store.hourList = [6, 9, 12, 15, 18, 21];
       localStorage.removeItem('_wf2_cfg');
     },
   },
@@ -94,8 +64,8 @@ export default {
     },
   },
   mounted() {
-    this.saveLocation = this.appStore.saveLocation;
-    this.customHourList = this.appStore.hourList;
+    this.saveLocation = this.store.saveLocation;
+    this.customHourList = this.store.hourList;
   },
 };
 </script>
