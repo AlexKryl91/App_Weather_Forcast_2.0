@@ -2,6 +2,7 @@
 import { useAppStore } from '@/stores/AppStore';
 
 export default {
+  name: 'TabsBar',
   data() {
     return {
       store: useAppStore(),
@@ -21,7 +22,6 @@ export default {
       }
     },
   },
-  name: 'TabsBar',
 };
 </script>
 
@@ -31,7 +31,7 @@ export default {
       v-for="(tab, index) in store.meteoData.daily"
       v-bind:key="tab.date"
       class="tabs__day"
-      :class="{ active: currentDay === index }"
+      :class="{ active: store.currentTab === index }"
       :value="index"
     >
       <div>

@@ -75,6 +75,7 @@
     margin-bottom: -$common-pb;
     padding-bottom: $common-pb;
     overflow-x: auto;
+    scroll-behavior: smooth;
 
     &::-webkit-scrollbar {
       height: $scroll-h;

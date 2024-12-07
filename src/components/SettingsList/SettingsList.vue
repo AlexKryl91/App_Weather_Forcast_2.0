@@ -50,8 +50,7 @@ export default {
       this.checkDifference();
     },
     setDefault() {
-      this.saveLocation = this.store.saveLocation = false;
-      this.customHourList = this.store.hourList = [6, 9, 12, 15, 18, 21];
+      this.store.$reset();
       localStorage.removeItem('_wf2_cfg');
     },
   },
