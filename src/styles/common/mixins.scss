@@ -1,0 +1,20 @@
+@mixin spinner($size, $bg-color) {
+  position: absolute;
+  width: $size;
+  height: $size;
+  padding: 16px;
+  border-radius: 50%;
+  background: $bg-color;
+  --_m: conic-gradient(#0000 10%, #000), linear-gradient(#000 0 0) content-box;
+  -webkit-mask: var(--_m);
+  mask: var(--_m);
+  -webkit-mask-composite: source-out;
+  mask-composite: subtract;
+  animation: spinner1 1s infinite linear;
+
+  @keyframes spinner1 {
+    to {
+      transform: rotate(1turn);
+    }
+  }
+}

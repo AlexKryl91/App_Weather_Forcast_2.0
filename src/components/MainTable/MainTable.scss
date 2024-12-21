@@ -74,7 +74,7 @@
     display: flex;
     margin-bottom: -$common-pb;
     padding-bottom: $common-pb;
-    overflow-x: auto;
+    overflow-x: scroll;
     scroll-behavior: smooth;
 
     &::-webkit-scrollbar {
