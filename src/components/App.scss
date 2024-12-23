@@ -53,7 +53,7 @@ body {
   background: var(--color-app-bg);
   border: var(--border-app);
   border-radius: 20px;
-  padding: 0 20px 20px;
+  padding-inline: 20px;
 
   display: flex;
   flex-direction: column;
@@ -85,5 +85,18 @@ body {
   &__header {
     font-size: 32px;
     font-weight: 500;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  body {
+    font-size: 12px;
+  }
+
+  #app {
+    padding: 8px;
+  }
+  .container {
+    padding: 0 10px 10px;
   }
 }

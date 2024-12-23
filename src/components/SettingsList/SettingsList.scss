@@ -83,16 +83,17 @@
 
 .credits {
   width: 100%;
-  display: flex;
+
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  // column-gap: 20px;
   align-items: center;
   justify-content: space-between;
-  column-gap: 20px;
 
   padding: 10px;
   margin-bottom: -36px;
 
   border-top: var(--border-grey);
-
   color: var(--color-grey-medium);
 
   a,
@@ -128,5 +129,54 @@
         color: var(--color-btn-darkblue);
       }
     }
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .settings-header {
+    font-size: 20px;
+  }
+
+  .toggle-wrapper {
+    width: 86%;
+
+    .note {
+      margin: 6px 0 0 50px;
+    }
+  }
+
+  .hours-edit {
+    row-gap: 10px;
+
+    &__label {
+      font-size: 14px;
+    }
+
+    &__list {
+      height: 160px;
+
+      li {
+        font-size: 14px;
+        padding: 10px 60px 10px 100px;
+      }
+    }
+  }
+
+  .btn-wrapper {
+    flex-direction: column;
+    row-gap: 10px;
+  }
+
+  .credits {
+    grid-template-rows: repeat(2, auto);
+    grid-template-columns: repeat(2, auto);
+    column-gap: 10px;
+
+    img {
+      grid-row: 1 / span 2;
+    }
+
+    margin-bottom: -32px;
+    padding: 10px 16px 10px 10px;
   }
 }

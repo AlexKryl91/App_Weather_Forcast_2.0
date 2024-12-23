@@ -5,7 +5,7 @@
   $common-pb: 10px;
 
   height: 100%;
-  margin-block: 20px 10px;
+  margin-top: 20px;
   padding-bottom: $common-pb;
   display: flex;
 
@@ -165,5 +165,11 @@
       background: #fff;
       cursor: pointer;
     }
+  }
+}
+
+@media screen and (max-width: 1279px) {
+  .w-wrapper {
+    mask-image: var(--mask-gradient);
   }
 }

@@ -22,6 +22,13 @@
   --border-grey: 1px solid var(--color-grey-light);
 
   // mask
+  --mask-gradient: linear-gradient(
+    90deg,
+    transparent 0%,
+    #ffffff 5%,
+    #ffffff 95%,
+    transparent 100%
+  );
   --mask-right-gradient: linear-gradient(
     90deg,
     #0000 0%,

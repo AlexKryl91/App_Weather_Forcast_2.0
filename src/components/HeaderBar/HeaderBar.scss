@@ -22,6 +22,7 @@
   .tools-wrapper {
     position: relative;
     display: flex;
+    align-items: center;
 
     $h-size: 40px;
 
@@ -40,6 +41,7 @@
         background: #fff;
         width: 500px;
         padding-left: 54px;
+        padding-right: 16px;
       }
     }
 
@@ -53,6 +55,8 @@
       border-radius: 50%;
 
       svg {
+        height: 100%;
+        width: 100%;
         transition: var(--transition-duration);
 
         * {
@@ -75,11 +79,15 @@
     }
 
     .settings-btn {
+      height: $h-size;
+      width: $h-size;
       margin-inline: 20px 10px;
       background: none;
       border-radius: 50%;
 
       svg {
+        height: 100%;
+        width: 100%;
         transition: var(--transition-duration);
 
         * {
@@ -139,6 +147,55 @@
           stroke: var(--color-text-blue);
           stroke-opacity: 1;
         }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .header {
+    padding-block: 10px;
+
+    .logo-wrapper {
+      img {
+        height: 40px;
+        width: auto;
+      }
+
+      h1 {
+        display: none;
+        // font-weight: 700;
+        // font-size: 28px;
+        // color: var(--color-text-blue);
+        // text-shadow: 0 0 20px #fff;
+      }
+    }
+
+    .tools-wrapper {
+      $h-size: 32px;
+
+      .search-bar {
+        height: $h-size;
+        width: $h-size;
+        border-radius: $h-size;
+        padding-left: $h-size;
+        font-size: 14px;
+
+        &_active {
+          width: 190px;
+          padding-left: 42px;
+        }
+      }
+
+      .location-btn {
+        width: $h-size;
+        height: $h-size;
+      }
+
+      .settings-btn {
+        height: $h-size;
+        width: $h-size;
+        margin-inline: 12px 6px;
       }
     }
   }

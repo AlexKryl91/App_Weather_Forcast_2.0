@@ -30,3 +30,13 @@
 .slide-leave-to {
   transform: rotateX(90deg);
 }
+
+@media screen and (max-width: 576px) {
+  .modal {
+    $head-h: 61px;
+
+    top: $head-h;
+    height: calc(100% - $head-h);
+    padding: 20px 0 30px;
+  }
+}

@@ -43,16 +43,31 @@
     &::before {
       background: var(--color-btn-blue);
       transform: translateX(26px);
-      //   animation: pulse 1.5s forwards;
     }
   }
 }
 
-// @keyframes pulse {
-//   0% {
-//     box-shadow: 0 0 0 0 #056ca099;
-//   }
-//   100% {
-//     box-shadow: 0 0 0 12px #fff0;
-//   }
-// }
+@media screen and (max-width: 576px) {
+  .toggle-btn {
+    font-size: 14px;
+    padding-left: 50px;
+
+    span {
+      width: 30px;
+      height: 10px;
+
+      &::before {
+        content: '';
+
+        width: 16px;
+        height: 16px;
+      }
+    }
+
+    .cbx:checked + span {
+      &::before {
+        transform: translateX(20px);
+      }
+    }
+  }
+}

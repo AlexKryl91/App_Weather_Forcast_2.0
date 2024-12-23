@@ -21,12 +21,17 @@ export default {
         }
       }
     },
+    horizontalScroll(e: WheelEvent) {
+      e.preventDefault();
+      const tabsList = document.querySelector('.tabs') as HTMLElement;
+      tabsList.scrollLeft += e.deltaY;
+    },
   },
 };
 </script>
 
 <template>
-  <ul @click="selectDay" class="tabs">
+  <ul @click="selectDay" @wheel="horizontalScroll" class="tabs">
     <li
       v-for="(tab, index) in store.meteoData.daily"
       v-bind:key="tab.date"
