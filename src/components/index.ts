@@ -1,6 +1,7 @@
 import AppPreloader from '@/components/AppPreloader/AppPreloader.vue';
 import HeaderBar from '@/components/HeaderBar/HeaderBar.vue';
 import MainTable from '@/components/MainTable/MainTable.vue';
+import MobileMainTable from '@/components/MobileMainTable/MobileMainTable.vue';
 import TabsBar from '@/components/TabsBar/TabsBar.vue';
 import SelectForm from '@/components/SelectForm/SelectForm.vue';
 import SettingsList from '@/components/SettingsList/SettingsList.vue';
@@ -14,6 +15,7 @@ export default [
   AppPreloader,
   HeaderBar,
   MainTable,
+  MobileMainTable,
   TabsBar,
   SelectForm,
   SettingsList,

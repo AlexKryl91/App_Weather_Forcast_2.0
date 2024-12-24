@@ -66,8 +66,9 @@ export default {
         </div>
         <div v-if="store.currentTab === 0" class="time">
           <img
+            class="clock-icon"
             src="@/assets/icons/clock.svg"
-            alt="Иконка календаря"
+            alt="Иконка времени"
             width="21"
             height="24"
           />
@@ -97,7 +98,7 @@ export default {
         v-for="data in store.currentMeteoData.hourly"
         v-bind:key="data.hour"
       >
-        <div class="w-item__top">
+        <div class="w-item-top">
           <div class="w-item-top__hour">
             {{ data.hour }}
           </div>

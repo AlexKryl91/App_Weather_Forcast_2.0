@@ -97,6 +97,8 @@ body {
     padding: 8px;
   }
   .container {
-    padding: 0 10px 10px;
+    padding-inline: 10px;
+    min-width: 344px;
+    min-height: 644px;
   }
 }

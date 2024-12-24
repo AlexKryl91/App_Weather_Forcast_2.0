@@ -9,7 +9,28 @@ export default {
       store: useAppStore(),
       isLoading: true,
       season: '' as TSeason,
+      windowWidth: window.innerWidth,
     };
+  },
+  methods: {
+    resizeHandler() {
+      this.windowWidth = window.innerWidth;
+    },
+    isIntroShown() {
+      return !this.store.location && !this.store.isError;
+    },
+    isErrorShown() {
+      return this.store.isError;
+    },
+    isMainShown() {
+      return this.store.location && !this.store.isError;
+    },
+    isMobileMain() {
+      return this.isMainShown() && this.windowWidth <= 576;
+    },
+    isDesktopMain() {
+      return this.isMainShown() && this.windowWidth > 576;
+    },
   },
   beforeMount() {
     const month = new Date().getMonth();
@@ -52,6 +73,10 @@ export default {
       }
     };
     document.querySelector('#app')?.classList.add(this.season);
+    window.addEventListener('resize', this.resizeHandler);
+  },
+  unmounted() {
+    window.removeEventListener('resize', this.resizeHandler);
   },
 };
 </script>
@@ -62,12 +87,12 @@ export default {
   </Transition>
   <div v-show="!isLoading" class="container">
     <HeaderBar />
-    <div v-if="!store.location && !store.isError" class="msg">
+    <div v-if="isIntroShown()" class="msg">
       <span class="init"
         >Укажите локацию, в которой хотели бы узнать погоду</span
       >
     </div>
-    <div v-if="store.isError" class="msg err">
+    <div v-if="isErrorShown()" class="msg err">
       <span class="err__header"
         >Ошибка запроса
         {{ store.errorCode === 'geofetch' ? 'геоданных' : 'метеоданных' }}</span
@@ -77,8 +102,9 @@ export default {
         позднее</span
       >
     </div>
-    <MainTable v-if="store.location && !store.isError" />
-    <TabsBar v-if="store.location && !store.isError" />
+    <MainTable v-if="isMainShown() && isDesktopMain()" />
+    <MobileMainTable v-if="isMainShown() && isMobileMain()" />
+    <TabsBar v-if="isMainShown()" />
 
     <Transition name="slide">
       <ModalWindow v-if="store.isSearchOpened">

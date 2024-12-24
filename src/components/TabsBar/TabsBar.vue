@@ -1,5 +1,6 @@
 <script lang="ts">
 import { useAppStore } from '@/stores/AppStore';
+import type { IReDailyMeteoData } from '@/types/types';
 
 export default {
   name: 'TabsBar',
@@ -7,6 +8,7 @@ export default {
     return {
       store: useAppStore(),
       currentDay: 0,
+      windowWidth: window.innerWidth,
     };
   },
   methods: {
@@ -26,6 +28,25 @@ export default {
       const tabsList = document.querySelector('.tabs') as HTMLElement;
       tabsList.scrollLeft += e.deltaY;
     },
+    resizeHandler() {
+      this.windowWidth = window.innerWidth;
+    },
+    tabDowHandler(tab: IReDailyMeteoData, index: number) {
+      switch (index) {
+        case 0:
+          return 'Сегодня';
+        case 1:
+          return 'Завтра';
+        default:
+          return this.windowWidth > 576 ? tab.dow : tab.dowShort;
+      }
+    },
+  },
+  mounted() {
+    window.addEventListener('resize', this.resizeHandler);
+  },
+  unmounted() {
+    window.removeEventListener('resize', this.resizeHandler);
   },
 };
 </script>
@@ -41,8 +62,9 @@ export default {
     >
       <div>
         <div class="dow">
-          {{ index === 0 ? 'Сегодня' : index === 1 ? 'Завтра' : tab.dow }}
+          {{ tabDowHandler(tab, index) }}
         </div>
+
         <div class="date">{{ tab.dateShort }}</div>
       </div>
       <img
@@ -52,7 +74,7 @@ export default {
         width="45"
         height="45"
       />
-      <div class="temp">{{ tab.minTemp }}...{{ tab.maxTemp }}</div>
+      <div class="temp">{{ tab.minTemp }}...{{ tab.maxTemp }} &deg;C</div>
     </li>
   </ul>
 </template>
