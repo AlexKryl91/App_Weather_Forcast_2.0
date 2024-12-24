@@ -16,7 +16,7 @@ export default {
     getWIconUrl(sunTag: 'day' | 'night', wCode: number) {
       const isValidCode = wCode === 0 || wCode === 1 || wCode === 2;
       const strAdd = isValidCode && sunTag === 'night' ? '_night' : '';
-      return `/src/assets/icons/weather_icons/wi_code${wCode}${strAdd}.svg`;
+      return `./icons/weather_icons/wi_code${wCode}${strAdd}.svg`;
     },
     openExtInfo(e: Event) {
       const node = e.target as HTMLElement;
@@ -46,7 +46,7 @@ export default {
         <div class="date">
           <img
             class="calendar-icon"
-            src="@/assets/icons/calendar.svg"
+            src="/icons/calendar.svg"
             alt="Иконка календаря"
             width="18"
             height="18"
@@ -56,7 +56,7 @@ export default {
         <div v-if="store.currentTab === 0" class="time">
           <img
             class="clock-icon"
-            src="@/assets/icons/clock.svg"
+            src="/icons/clock.svg"
             alt="Иконка времени"
             width="18"
             height="18"
@@ -66,7 +66,7 @@ export default {
         <div class="place">
           <img
             class="flag-icon"
-            :src="`/src/assets/icons/flag_icons/fi_${store.location?.countryCode}.svg`"
+            :src="`./icons/flag_icons/fi_${store.location?.countryCode}.svg`"
             alt="Иконка флага"
             width="18"
             height="18"
@@ -100,7 +100,7 @@ export default {
           </div>
           <img
             class="w-item-top__open-icon"
-            src="/src/assets/icons/chevron-round.svg"
+            src="/icons/chevron-round.svg"
             alt="Иконка раскрыть"
             width="32"
             height="32"

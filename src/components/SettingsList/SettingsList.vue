@@ -104,7 +104,7 @@ export default {
 
   <div class="credits">
     <img
-      src="/src/assets/icons/info.svg"
+      src="/icons/info.svg"
       alt="Иконка инфо"
       class="icon-info"
       width="32"

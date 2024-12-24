@@ -1,12 +1,12 @@
-import iconTemp from '@/assets/icons/temp.svg';
-import iconPress from '@/assets/icons/arrow-down.svg';
-import iconWind from '@/assets/icons/wind.svg';
-import iconTornado from '@/assets/icons/tornado.svg';
-import iconCompass from '@/assets/icons/compass.svg';
-import iconDroplet from '@/assets/icons/droplet.svg';
-import iconUmbrella from '@/assets/icons/umbrella.svg';
-import iconCloud from '@/assets/icons/cloud.svg';
-import iconEye from '@/assets/icons/eye.svg';
+import iconTemp from '/icons/temp.svg';
+import iconPress from '/icons/arrow-down.svg';
+import iconWind from '/icons/wind.svg';
+import iconTornado from '/icons/tornado.svg';
+import iconCompass from '/icons/compass.svg';
+import iconDroplet from '/icons/droplet.svg';
+import iconUmbrella from '/icons/umbrella.svg';
+import iconCloud from '/icons/cloud.svg';
+import iconEye from '/icons/eye.svg';
 
 const paramsData = [
   {

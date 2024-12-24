@@ -69,7 +69,7 @@ export default {
       </div>
       <img
         class="w-icon"
-        :src="`/src/assets/icons/weather_icons/wi_code${tab.weatherCode}.svg`"
+        :src="`./icons/weather_icons/wi_code${tab.weatherCode}.svg`"
         alt=""
         width="45"
         height="45"

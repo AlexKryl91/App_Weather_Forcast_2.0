@@ -56,7 +56,7 @@ export default {
 <template>
   <header class="header">
     <div class="logo-wrapper">
-      <img src="@/assets/img/logo.svg" alt="Логотип" width="83" height="50" />
+      <img src="/img/logo.svg" alt="Логотип" width="83" height="50" />
       <h1>Weather Forcast</h1>
     </div>
     <div class="tools-wrapper">

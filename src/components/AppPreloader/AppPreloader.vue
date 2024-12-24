@@ -9,7 +9,7 @@ export default {
     <div class="spinner"></div>
     <img
       class="preloader__logo"
-      src="@/assets/img/logo.svg"
+      src="/img/logo.svg"
       alt="Логотип"
       width="166"
       height="100"

@@ -13,12 +13,6 @@ export default {
     closeSearch() {
       this.store.isSearchOpened = false;
     },
-    getImgURL(code: string) {
-      return new URL(
-        `/src/assets/icons/flag_icons/fi_${code}.svg`,
-        import.meta.url,
-      ).href;
-    },
     selectLocation(e: Event) {
       const node = e.target as HTMLUListElement;
       if (node.closest('li')) {
@@ -56,7 +50,7 @@ export default {
         v-for="(location, index) in store.fetchedList"
         v-bind:key="location.id"
         :style="{
-          'background-image': `url(${getImgURL(location.country_code)})`,
+          'background-image': `url(./icons/flag_icons/fi_${location.country_code}.svg)`,
         }"
         :value="index"
       >
