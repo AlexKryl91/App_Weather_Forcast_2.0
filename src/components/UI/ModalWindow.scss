@@ -1,5 +1,5 @@
 .modal {
-  $head-h: 81px;
+  $head-h: var(--desktop-header-h);
 
   position: absolute;
   top: $head-h;
@@ -10,8 +10,8 @@
 
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
   row-gap: 30px;
 
   background: #fff;
@@ -33,7 +33,7 @@
 
 @media screen and (max-width: 576px) {
   .modal {
-    $head-h: 61px;
+    $head-h: var(--mobile-header-h);
 
     top: $head-h;
     height: calc(100% - $head-h);

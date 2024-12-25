@@ -9,13 +9,9 @@ export default {
       store: useAppStore(),
       isLoading: true,
       season: '' as TSeason,
-      windowWidth: window.innerWidth,
     };
   },
   methods: {
-    resizeHandler() {
-      this.windowWidth = window.innerWidth;
-    },
     isIntroShown() {
       return !this.store.location && !this.store.isError;
     },
@@ -24,12 +20,6 @@ export default {
     },
     isMainShown() {
       return this.store.location && !this.store.isError;
-    },
-    isMobileMain() {
-      return this.isMainShown() && this.windowWidth <= 576;
-    },
-    isDesktopMain() {
-      return this.isMainShown() && this.windowWidth > 576;
     },
   },
   beforeMount() {
@@ -73,50 +63,30 @@ export default {
       }
     };
     document.querySelector('#app')?.classList.add(this.season);
-    window.addEventListener('resize', this.resizeHandler);
-  },
-  unmounted() {
-    window.removeEventListener('resize', this.resizeHandler);
   },
 };
 </script>
 
 <template>
-  <Transition name="vanish">
-    <AppPreloader v-if="isLoading" />
+  <Transition v-if="isLoading" name="vanish">
+    <AppPreloader />
   </Transition>
-  <div v-show="!isLoading" class="container">
-    <HeaderBar />
-    <div v-if="isIntroShown()" class="msg">
-      <span class="init"
-        >Укажите локацию, в которой хотели бы узнать погоду</span
-      >
-    </div>
-    <div v-if="isErrorShown()" class="msg err">
-      <span class="err__header"
-        >Ошибка запроса
-        {{ store.errorCode === 'geofetch' ? 'геоданных' : 'метеоданных' }}</span
-      >
-      <span class="err__desc"
-        >Ой! Кажется что-то пошло не так... Поробуйте повторить запрос
-        позднее</span
-      >
-    </div>
-    <MainTable v-if="isMainShown() && isDesktopMain()" />
-    <MobileMainTable v-if="isMainShown() && isMobileMain()" />
-    <TabsBar v-if="isMainShown()" />
 
-    <Transition name="slide">
+  <div v-else class="container">
+    <HeaderBar />
+    <IntroMsg v-if="isIntroShown()" />
+    <ErrorMsg v-if="isErrorShown()" />
+    <MainContainer v-if="isMainShown()" />
+
+    <TransitionGroup name="slide">
       <ModalWindow v-if="store.isSearchOpened">
         <SelectForm />
       </ModalWindow>
-    </Transition>
 
-    <Transition name="slide">
       <ModalWindow v-if="store.isSettingsOpened">
         <SettingsList />
       </ModalWindow>
-    </Transition>
+    </TransitionGroup>
 
     <FetchLoader v-if="store.isMeteoFetching" />
   </div>

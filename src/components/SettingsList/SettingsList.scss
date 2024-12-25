@@ -1,3 +1,5 @@
+@use '../../styles/common/mixins.scss';
+
 .settings-header {
   font-size: 26px;
   text-align: center;
@@ -27,7 +29,7 @@
 
   &__list {
     list-style: none;
-    $br-small: 10px;
+    $br-small: var(--br-m);
 
     width: fit-content;
     height: 260px;
@@ -36,24 +38,12 @@
     font-weight: 700;
 
     border-radius: $br-small;
-    background-color: #f0f0f0;
-    box-shadow: inset 0 0 4px 2px #00000040;
+    background-color: var(--color-select-field);
+    box-shadow: var(--shadow-inset);
 
     transition: height var(--transition-duration);
 
-    &::-webkit-scrollbar {
-      width: $br-small;
-
-      &-track {
-        background: #cecece;
-        border-radius: 0 $br-small $br-small 0;
-      }
-
-      &-thumb {
-        background: #056da0;
-        border-radius: $br-small;
-      }
-    }
+    @include mixins.scrollbar(vertical, $br-small, 'blue');
 
     li {
       position: relative;
@@ -71,7 +61,7 @@
     .selected {
       background-color: var(--color-btn-blue);
       background-image: url('/icons/check-filled.svg');
-      color: #fff;
+      color: var(--color-white);
     }
   }
 }
@@ -86,7 +76,6 @@
 
   display: grid;
   grid-template-columns: repeat(3, auto);
-  // column-gap: 20px;
   align-items: center;
   justify-content: space-between;
 
@@ -106,11 +95,6 @@
 @media (hover: hover) {
   .hours-edit {
     &__list {
-      &::-webkit-scrollbar-thumb:hover {
-        cursor: pointer;
-        background: var(--color-text-blue);
-      }
-
       .selected:hover {
         background-color: var(--color-btn-blue);
       }
@@ -176,7 +160,7 @@
       grid-row: 1 / span 2;
     }
 
-    margin-bottom: -32px;
+    margin-bottom: -30px;
     padding: 10px 16px 10px 10px;
   }
 }

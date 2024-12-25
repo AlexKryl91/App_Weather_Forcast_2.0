@@ -7,16 +7,14 @@
   height: 100%;
   background: var(--color-text-blue);
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include mixins.flex-center-center;
 
   &__logo {
     margin-bottom: 10px;
   }
 
   .spinner {
-    @include mixins.spinner(240px, #fff);
+    @include mixins.spinner(240px, var(--color-white));
   }
 }
 

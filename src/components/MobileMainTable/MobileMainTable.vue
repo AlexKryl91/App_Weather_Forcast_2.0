@@ -22,6 +22,9 @@ export default {
       const node = e.target as HTMLElement;
       if (node.closest('.w-item')) {
         node.querySelector('.w-item-extended')?.classList.toggle('opened');
+        node
+          .querySelector('.w-item-top__open-icon')
+          ?.classList.toggle('unfold');
       }
     },
   },

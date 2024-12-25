@@ -1,19 +1,20 @@
 @use '../../styles/common/mixins.scss';
 
 .fetching-loader {
-  width: 100%;
-  height: 100%;
+  @include mixins.w-h-100precent;
+  @include mixins.flex-center-center;
   position: absolute;
   top: 0;
   left: 0;
   backdrop-filter: blur(4px);
-  background-image: radial-gradient(#1a2e4766 0%, #192d4666 25%, #0000 90%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background-image: radial-gradient(
+    #1a2e4766 0%,
+    #192d4666 25%,
+    var(--color-tr) 90%
+  );
   z-index: 99;
 
   .spinner {
-    @include mixins.spinner(160px, #fff);
+    @include mixins.spinner(160px, var(--color-white));
   }
 }

@@ -15,7 +15,7 @@
       font-weight: 700;
       font-size: 28px;
       color: var(--color-text-blue);
-      text-shadow: 0 0 20px #fff;
+      text-shadow: 0 0 20px var(--color-white);
     }
   }
 
@@ -38,10 +38,9 @@
       overflow: hidden;
 
       &_active {
-        background: #fff;
+        background: var(--color-white);
         width: 500px;
-        padding-left: 54px;
-        padding-right: 12px;
+        padding-inline: 54px 12px;
       }
     }
 
@@ -74,7 +73,7 @@
         box-shadow: 0 0 0 0 #056ca099;
       }
       75% {
-        box-shadow: 0 0 0 12px #fff0;
+        box-shadow: 0 0 0 12px var(--color-tr);
       }
     }
 
@@ -85,21 +84,19 @@
       background: none;
       border-radius: 50%;
 
-      svg {
-        height: 100%;
-        width: 100%;
+      svg,
+      svg > * {
         transition: var(--transition-duration);
-
-        * {
-          transition: var(--transition-duration);
-        }
       }
     }
 
-    .loc-active svg {
+    .loc-active svg,
+    .set-active svg {
       scale: 1.1;
-      filter: drop-shadow(0 0 4px #fff);
+      filter: drop-shadow(0 0 4px var(--color-white));
+    }
 
+    .loc-active svg {
       path {
         fill: var(--color-text-blue);
         fill-opacity: 1;
@@ -114,10 +111,7 @@
     }
 
     .set-active svg {
-      scale: 1.1;
-      filter: drop-shadow(0 0 4px #fff);
       transform: rotateZ(180deg);
-
       * {
         stroke: var(--color-text-blue);
         stroke-opacity: 1;
@@ -152,22 +146,36 @@
   }
 }
 
+@media screen and (max-width: 1020px) {
+  .header {
+    .tools-wrapper {
+      .search-bar {
+        &_active {
+          width: 270px;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 776px) {
+  .header {
+    .logo-wrapper {
+      h1 {
+        display: none;
+      }
+    }
+  }
+}
+
 @media screen and (max-width: 576px) {
   .header {
-    padding-block: 10px;
+    padding-block: var(--pad-m);
 
     .logo-wrapper {
       img {
         height: 40px;
         width: auto;
-      }
-
-      h1 {
-        display: none;
-        // font-weight: 700;
-        // font-size: 28px;
-        // color: var(--color-text-blue);
-        // text-shadow: 0 0 20px #fff;
       }
     }
 

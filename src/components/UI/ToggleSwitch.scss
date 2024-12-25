@@ -17,7 +17,7 @@
     margin-block: auto;
     width: 40px;
     height: 14px;
-    border-radius: 8px;
+    border-radius: var(--br-s);
     background: #9a9999;
     transition: var(--transition-duration);
 
@@ -58,7 +58,6 @@
 
       &::before {
         content: '';
-
         width: 16px;
         height: 16px;
       }

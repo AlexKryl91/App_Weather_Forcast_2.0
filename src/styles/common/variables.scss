@@ -10,11 +10,15 @@
   --color-grey-light: #0000004d;
   --color-btn-blue: #4678d7;
   --color-btn-darkblue: #1e4baa;
+  --color-error-msg: #b31e1e;
+  --color-white: #ffffff;
+  --color-select-field: #f0f0f0;
+  --color-tr: #0000;
+  --color-shadow: #00000040;
 
   // shadows
-  --shadow-section: 0 -16px 16px #00000040;
-  --shadow-card-light: 4px 6px 6px #00000040;
-  --shadow-card-dark: -4px 6px 6px #00000040;
+  --shadow-tab: 2px 4px 4px var(--color-shadow);
+  --shadow-inset: inset 0 0 4px 2px var(--color-shadow);
 
   // border
   --border-app: 1px solid var(--color-app-border);
@@ -24,27 +28,44 @@
   // mask
   --mask-gradient: linear-gradient(
     90deg,
-    #0000 0%,
-    #ffffff 5%,
-    #ffffff 95%,
-    #0000 100%
+    var(--color-tr) 0%,
+    var(--color-white) 5%,
+    var(--color-white) 95%,
+    var(--color-tr) 100%
   );
-  --mask-right-gradient: linear-gradient(
-    90deg,
-    #0000 0%,
-    #fff 5%,
-    #fff 95%,
-    #0000 100%
+  --mask-vertical: linear-gradient(
+    180deg,
+    var(--color-tr) 0%,
+    var(--color-white) 1%,
+    var(--color-white) 99%,
+    var(--color-tr) 100%
   );
 
   // fonts
   --ff-main: 'Inter', Arial, Verdana, sans-serif;
 
-  // common style
-  --desktop-max-width: 1280px;
-  --app-max-width: 1240px;
+  // Desktop style
+  --desktop-max-width: 1240px;
+  --desktop-max-height: 792px;
 
-  --border-radius-small: 10px;
+  --desktop-header-h: 81px;
+
+  // Mobile style
+  --mobile-min-width: 344px;
+  --mobile-min-height: 632px;
+
+  --mobile-header-h: 61px;
+
+  // Common style
+  --br-l: 20px;
+  --br-m: 10px;
+  --br-s: 8px;
+
+  --pad-l: 20px;
+  --pad-m: 10px;
+  --pad-s: 8px;
+
+  --scroll-main-size: 6px;
 
   // for effects
   --transition-duration: 0.3s;

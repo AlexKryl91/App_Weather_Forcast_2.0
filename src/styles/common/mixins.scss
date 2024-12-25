@@ -1,3 +1,20 @@
+@mixin w-h-100precent {
+  width: 100%;
+  height: 100%;
+}
+
+@mixin flex-center-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-column-spb {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 @mixin spinner($size, $bg-color) {
   position: absolute;
   width: $size;
@@ -19,16 +36,52 @@
   }
 }
 
-// &::-webkit-scrollbar {
-//   height: $scroll-h;
+@mixin scrollbar($orientation, $main-size, $color-tag: 'white') {
+  @if $color-tag == 'blue' {
+    &::-webkit-scrollbar {
+      width: $main-size;
 
-//   &-track {
-//     background: #0000;
-//     border-radius: $scroll-h;
-//   }
+      &-track {
+        background: #cecece;
+        border-radius: 0 $main-size $main-size 0;
+      }
 
-//   &-thumb {
-//     background: var(--color-tab-bg);
-//     border-radius: $scroll-h;
-//   }
-// }
+      &-thumb {
+        background: #056da0;
+        border-radius: $main-size;
+
+        @media (hover: hover) {
+          &:hover {
+            cursor: pointer;
+            background: var(--color-text-blue);
+          }
+        }
+      }
+    }
+  } @else {
+    &::-webkit-scrollbar {
+      @if $orientation == horizontal {
+        height: $main-size;
+      } @else {
+        width: $main-size;
+      }
+
+      &-track {
+        background: var(--color-tr);
+        border-radius: $main-size;
+      }
+
+      &-thumb {
+        background: var(--color-tab-bg);
+        border-radius: $main-size;
+
+        @media (hover: hover) {
+          &:hover {
+            background: var(--color-white);
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+}

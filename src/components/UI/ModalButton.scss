@@ -1,9 +1,9 @@
 .modal-btn {
   min-width: 150px;
-  padding: 10px 20px;
+  padding: var(--pad-m) var(--pad-l);
   font-size: 20px;
   color: #fff;
-  border-radius: 10px;
+  border-radius: var(--br-m);
   background-color: var(--color-btn-blue);
   transition: var(--transition-duration);
 }

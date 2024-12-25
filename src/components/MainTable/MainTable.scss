@@ -1,23 +1,24 @@
+@use '../../styles/common/mixins.scss';
+
 .weather-table {
-  $scroll-h: 6px;
-  $first-w: 246px;
-  $first-mr: 22px;
-  $common-pb: 10px;
+  $scroll-h: var(--scroll-main-size);
+  $first-el-w: 246px;
+  $first-el-mar: 22px;
+  $common-pb: var(--pad-m);
 
   height: 100%;
   margin-top: 20px;
-  padding-bottom: $common-pb;
+
   display: flex;
 
   .head-item {
-    padding-bottom: $scroll-h;
+    @include mixins.flex-column-spb;
+
+    padding-bottom: 16px;
 
     height: 100%;
-    min-width: $first-w;
-    margin-right: $first-mr;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    min-width: $first-el-w;
+    margin-right: $first-el-mar;
 
     .date-wrapper {
       font-size: 20px;
@@ -70,26 +71,13 @@
   }
 
   .w-wrapper {
-    width: calc(100% - $first-w - $first-mr);
+    width: calc(100% - $first-el-w - $first-el-mar);
     display: flex;
-    margin-bottom: -$common-pb;
     padding-bottom: $common-pb;
     overflow-x: scroll;
     scroll-behavior: smooth;
 
-    &::-webkit-scrollbar {
-      height: $scroll-h;
-
-      &-track {
-        background: #0000;
-        border-radius: $scroll-h;
-      }
-
-      &-thumb {
-        background: var(--color-tab-bg);
-        border-radius: $scroll-h;
-      }
-    }
+    @include mixins.scrollbar(horizontal, $scroll-h);
 
     .w-item {
       width: 140px;
@@ -97,19 +85,16 @@
       height: 100%;
       color: var(--color-grey-dark);
       padding: 6px 10px 0;
-      border-radius: 20px;
+      border-radius: var(--br-l);
       background-image: linear-gradient(
         180deg,
-        #0000 0%,
+        var(--color-tr) 0%,
         var(--color-tab-bg) 25%,
         var(--color-tab-bg) 50%,
-        #0000 100%
+        var(--color-tr) 100%
       );
 
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-
+      @include mixins.flex-column-spb;
       margin-right: 18px;
 
       &:last-of-type {
@@ -155,15 +140,6 @@
           padding: 3px 16px;
         }
       }
-    }
-  }
-}
-
-@media (hover: hover) {
-  .w-wrapper {
-    &::-webkit-scrollbar-thumb:hover {
-      background: #fff;
-      cursor: pointer;
     }
   }
 }

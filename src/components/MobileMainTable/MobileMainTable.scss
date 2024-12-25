@@ -1,3 +1,5 @@
+@use '../../styles/common/mixins.scss';
+
 .weather-table {
   height: calc(100% - 201px);
   width: 100%;
@@ -51,7 +53,7 @@
   }
 
   .w-wrapper {
-    $scroll-h: 6px;
+    $scroll-h: var(--scroll-main-size);
 
     width: 100%;
     padding-right: 6px;
@@ -61,29 +63,19 @@
     overflow-y: scroll;
     scroll-behavior: smooth;
 
-    &::-webkit-scrollbar {
-      width: $scroll-h;
+    mask-image: var(--mask-vertical);
 
-      &-track {
-        background: #0000;
-        border-radius: $scroll-h;
-      }
-
-      &-thumb {
-        background: var(--color-tab-bg);
-        border-radius: $scroll-h;
-      }
-    }
+    @include mixins.scrollbar(vertical, var(--scroll-main-size));
 
     .w-item {
       width: 100%;
       border-radius: 20px;
       background-image: linear-gradient(
         90deg,
-        #0000 0%,
+        var(--color-tr) 0%,
         var(--color-tab-bg) 5%,
         var(--color-tab-bg) 95%,
-        #0000 100%
+        var(--color-tr) 100%
       );
       margin-bottom: 6px;
 
@@ -95,6 +87,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+
         min-height: 80px;
         pointer-events: none;
 
@@ -107,13 +100,6 @@
           color: var(--color-grey-light);
           transform: rotate(-90deg);
         }
-
-        // &__icon {
-        // display: block;
-        // margin-block: auto;
-        // width: 100px;
-        // height: 100px;
-        // }
 
         &__wrapper {
           width: 120px;
@@ -132,6 +118,11 @@
 
         &__open-icon {
           margin-right: 6px;
+          transition: transform var(--transition-duration);
+        }
+
+        .unfold {
+          transform: rotate(180deg);
         }
       }
 
@@ -173,7 +164,7 @@
 
       .opened {
         max-height: 210px;
-        padding-bottom: 10px;
+        padding-bottom: var(--pad-m);
       }
     }
   }

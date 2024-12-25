@@ -1,9 +1,12 @@
+@use '../../styles/common/mixins.scss';
+
 .tabs {
   min-height: fit-content;
 
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+
   column-gap: 12px;
   overflow-x: scroll;
   scroll-behavior: smooth;
@@ -11,21 +14,7 @@
   margin: 0 -10px 6px -10px;
   padding: 10px 10px 8px 10px;
 
-  $scroll-h: 6px;
-
-  &::-webkit-scrollbar {
-    height: $scroll-h;
-
-    &-track {
-      background: #0000;
-      border-radius: $scroll-h;
-    }
-
-    &-thumb {
-      background: var(--color-tab-bg);
-      border-radius: $scroll-h;
-    }
-  }
+  @include mixins.scrollbar(horizontal, var(--scroll-main-size));
 
   &__day {
     width: 160px;
@@ -37,9 +26,7 @@
     border-radius: 10px;
     color: var(--color-grey-dark);
 
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    @include mixins.flex-column-spb;
 
     cursor: pointer;
 
@@ -75,17 +62,12 @@
 
 @media (hover: hover) {
   .tabs {
-    &::-webkit-scrollbar-thumb:hover {
-      background: #fff;
-      cursor: pointer;
-    }
-
     &__day {
       transition: var(--transition-duration);
 
       &:not(.active):hover {
         scale: 1.05;
-        box-shadow: 2px 4px 4px #00000040;
+        box-shadow: var(--shadow-tab);
       }
     }
   }

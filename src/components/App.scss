@@ -1,3 +1,5 @@
+@use '../styles/common/mixins.scss';
+
 body {
   font-family: var(--ff-main);
   font-weight: 400;
@@ -5,13 +7,10 @@ body {
 }
 
 #app {
-  width: 100%;
-  height: 100%;
-  padding: 20px;
+  @include mixins.flex-center-center;
+  @include mixins.w-h-100precent;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: var(--pad-l);
 
   background-repeat: no-repeat;
   background-size: cover;
@@ -45,60 +44,31 @@ body {
 
 .container {
   position: relative;
-  width: 100%;
-  max-width: 1240px;
-  height: 100%;
-  max-height: 792px;
+  @include mixins.flex-column-spb;
+  @include mixins.w-h-100precent;
+
+  max-width: var(--desktop-max-width);
+  max-height: var(--desktop-max-height);
+  // min-height: 740px;
 
   background: var(--color-app-bg);
   border: var(--border-app);
-  border-radius: 20px;
-  padding-inline: 20px;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  border-radius: var(--br-l);
+  padding-inline: var(--pad-l);
 
   overflow: hidden;
-}
-
-.msg {
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  font-size: 24px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  row-gap: 30px;
-}
-
-.init {
-  color: var(--color-grey-dark);
-}
-
-.err {
-  color: #b31e1e;
-
-  &__header {
-    font-size: 32px;
-    font-weight: 500;
-  }
 }
 
 @media screen and (max-width: 576px) {
   body {
     font-size: 12px;
   }
-
   #app {
-    padding: 8px;
+    padding: var(--pad-s);
   }
   .container {
-    padding-inline: 10px;
-    min-width: 344px;
-    min-height: 644px;
+    padding-inline: var(--pad-m);
+    min-width: var(--mobile-min-width);
+    min-height: var(--mobile-min-height);
   }
 }
