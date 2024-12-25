@@ -84,9 +84,14 @@
       background: none;
       border-radius: 50%;
 
-      svg,
-      svg > * {
+      svg {
+        height: 100%;
+        width: 100%;
         transition: var(--transition-duration);
+
+        * {
+          transition: var(--transition-duration);
+        }
       }
     }
 
