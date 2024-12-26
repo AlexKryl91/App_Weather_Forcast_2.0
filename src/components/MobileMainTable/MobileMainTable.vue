@@ -32,6 +32,13 @@ export default {
     this.timeId = setInterval(() => {
       this.currentTime = this.store.midnightHandler();
     }, 1000);
+
+    this.store.isSearchOpened = false;
+    this.store.isMeteoFetching = false;
+  },
+  updated() {
+    this.store.isSearchOpened = false;
+    this.store.isMeteoFetching = false;
   },
   unmounted() {
     clearInterval(this.timeId);

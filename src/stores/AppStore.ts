@@ -91,8 +91,7 @@ export const useAppStore = defineStore('appStore', {
       this.meteoData = rebuildData;
       this.currentMeteoData = rebuildData.daily[0];
     },
-    meteoFetchHandler(value: number) {
-      this.setLocation(value);
+    meteoFetchUnit() {
       this.isMeteoFetching = true;
       meteoFetch(this.location as ILocation)
         .then((data) => {
@@ -106,29 +105,18 @@ export const useAppStore = defineStore('appStore', {
         .catch(() => {
           this.isError = true;
           this.errorCode = 'meteofetch';
-        })
-        .finally(() => {
-          this.isSearchOpened = false;
           this.isMeteoFetching = false;
+          this.isSearchOpened = false;
         });
+    },
+    meteoFetchHandler(value: number) {
+      this.setLocation(value);
+      this.meteoFetchUnit();
     },
     meteoUpdateHandler() {
       if (this.location) {
         this.currentTab = 0;
-        this.isMeteoFetching = true;
-        meteoFetch(this.location as ILocation)
-          .then((data) => {
-            if (data) {
-              this.meteoDataTransformer(data, this.hourList);
-            }
-          })
-          .catch(() => {
-            this.isError = true;
-            this.errorCode = 'meteofetch';
-          })
-          .finally(() => {
-            this.isMeteoFetching = false;
-          });
+        this.meteoFetchUnit();
       }
     },
     midnightHandler() {
