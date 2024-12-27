@@ -4,13 +4,13 @@
   "start_url": "https://alexkryl91.github.io/App_Weather_Forcast_2.0/",
   "icons": [
     {
-      "src": "/web-app-manifest-192x192.png",
+      "src": "./web-app-manifest-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/web-app-manifest-512x512.png",
+      "src": "./web-app-manifest-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
@@ -22,13 +22,13 @@
   "description": "Быстро и удобно узнай прогноз погоды для любой точки мира!",
   "screenshots": [
     {
-      "src": "/img/screenshot_wide.jpg",
+      "src": "./img/screenshot_wide.jpg",
       "sizes": "1216x805",
       "type": "image/jpeg",
       "form_factor": "wide"
     },
     {
-      "src": "/img/screenshot_narrow.jpg",
+      "src": "./img/screenshot_narrow.jpg",
       "sizes": "375x667",
       "type": "image/jpeg",
       "form_factor": "narrow"

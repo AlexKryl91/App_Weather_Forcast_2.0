@@ -75,6 +75,7 @@ export default {
         class="location-btn"
         :class="locationBtnClass"
         type="button"
+        title="Поиск локации"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -103,6 +104,7 @@ export default {
         class="settings-btn"
         :class="{ 'set-active': store.isSettingsOpened }"
         type="button"
+        title="Настройки"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
