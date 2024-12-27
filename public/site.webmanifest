@@ -4,8 +4,14 @@
   "start_url": "https://alexkryl91.github.io/App_Weather_Forcast_2.0/",
   "icons": [
     {
-      "src": "./web-app-icon-any.png",
+      "src": "./web-app-icon-any-249x150.png",
       "sizes": "249x150",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./web-app-icon-any-250x250.png",
+      "sizes": "250x250",
       "type": "image/png",
       "purpose": "any"
     },
