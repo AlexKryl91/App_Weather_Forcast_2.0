@@ -77,7 +77,7 @@ export default {
     >
     <span class="note">
       Данная опция позволяет сохранить последнюю выбранную локацию и настройки
-      даже после закрытия брузера.
+      даже после закрытия браузера.
     </span>
   </div>
   <div class="hours-edit">
@@ -127,4 +127,4 @@ export default {
   </div>
 </template>
 
-<style src="./SettingsList.scss"></style>
+<style scoped src="./SettingsList.scss"></style>
