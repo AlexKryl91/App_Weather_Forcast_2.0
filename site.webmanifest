@@ -1,6 +1,7 @@
 {
   "name": "Weather Forcast",
   "short_name": "WF",
+  "start_url": "https://alexkryl91.github.io/App_Weather_Forcast_2.0/",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
@@ -17,5 +18,20 @@
   ],
   "theme_color": "#056da0",
   "background_color": "#056da0",
-  "display": "standalone"
+  "display": "standalone",
+  "description": "Быстро и удобно узнай прогноз погоды для любой точки мира!",
+  "screenshots": [
+    {
+      "src": "/img/screenshot_wide.jpg",
+      "sizes": "1216x805",
+      "type": "image/jpeg",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/img/screenshot_narrow.jpg",
+      "sizes": "375x667",
+      "type": "image/jpeg",
+      "form_factor": "narrow"
+    }
+  ]
 }
